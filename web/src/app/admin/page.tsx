@@ -140,15 +140,15 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
     principles: cfg.atelierPage.principles.map(p => `${p.num}|${p.name}|${p.desc}|${p.detail}`).join('\n')
   });
 
-  useEffect(() => { setProducts(loadProducts()); }, []);
+  useEffect(() => { loadProducts().then(setProducts); }, []);
 
   const showToast = useCallback((msg: string) => {
     setToast(msg);
     setTimeout(() => setToast(''), 3000);
   }, []);
 
-  const updateCfg = useCallback((updated: SiteConfig) => {
-    saveConfig(updated);
+  const updateCfg = useCallback(async (updated: SiteConfig) => {
+    await saveConfig(updated);
     setCfg(updated);
   }, []);
 
@@ -173,7 +173,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
       description: pf.description, specs, images,
       story: pf.story
     };
-    let updated = loadProducts();
+    let updated = await loadProducts();
     if (editingId) {
       updated = updated.map(p => p.id === editingId ? product : p);
       showToast('Object updated');
@@ -181,7 +181,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
       updated.push(product);
       showToast('Object added to register');
     }
-    saveProducts(updated);
+    await saveProducts(updated);
     setProducts(updated);
     setEditingId(null);
     resetPf();
@@ -203,7 +203,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
     const p = products.find(x => x.id === id);
     if (!p || !confirm(`Remove "${p.name}" from the register?`)) return;
     const updated = products.filter(x => x.id !== id);
-    saveProducts(updated);
+    await saveProducts(updated);
     setProducts(updated);
     showToast('Object removed from register');
   };
@@ -289,12 +289,12 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
     }});
     showToast('Atelier page saved');
   };
-  const handleResetAll = () => {
+  const handleResetAll = async () => {
     if (!confirm('Restore all content to defaults? Products, site config, everything will reset.')) return;
-    resetProducts();
-    const fresh = resetConfig();
+    await resetProducts();
+    const fresh = await resetConfig();
     setCfg(fresh);
-    setProducts(loadProducts());
+    setProducts(await loadProducts());
     // Reset all form states
     setHero({ ...fresh.hero });
     setMarqueeItems(fresh.marqueeItems.join('\n'));
@@ -590,21 +590,23 @@ export default function AdminPage() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token })
-    }).then(res => {
-      if (res.ok) {
-        setAuthed(true);
-        setCfg(loadConfig());
-      } else {
-        localStorage.removeItem('mh_admin_token');
-      }
+    }).then(async (res) => {
+        if (res.ok) {
+          setAuthed(true);
+          const config = await loadConfig();
+          setCfg(config);
+        } else {
+          localStorage.removeItem('mh_admin_token');
+        }
     }).catch(() => {
       localStorage.removeItem('mh_admin_token');
     }).finally(() => setLoading(false));
   }, []);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setAuthed(true);
-    setCfg(loadConfig());
+    const config = await loadConfig();
+    setCfg(config);
   };
 
   const handleLogout = () => {

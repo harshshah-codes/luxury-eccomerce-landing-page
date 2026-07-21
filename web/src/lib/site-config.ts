@@ -1,3 +1,5 @@
+import { prisma } from '@/lib/prisma';
+
 export interface Spec {
   label: string;
   value: string;
@@ -109,143 +111,172 @@ export const DEFAULT_PRODUCTS: Product[] = [
   { id: 'p8', name: 'Plume d\'Or', nameEm: 'Plume d\'Or', category: 'Objets', price: '₹ 2,03,500', sku: 'MH-OB-011', year: '2024', tag: 'Cartridge · 18k', description: 'A fountain pen in lacquered brass with an 18k solid gold nib, ground by hand to a flexible stub. Cartridge/converter fill. The body is turned on the same 1936 lathe used for our first pen, finished in seven coats of black urushi.', specs: [{ label: 'Nib', value: '18k solid gold, hand-ground flexible stub' }, { label: 'Body', value: 'Brass, 7 coats black urushi' }, { label: 'Fill', value: 'Cartridge or converter' }, { label: 'Lathe', value: 'Original 1936 cast-iron original' }, { label: 'Length', value: '142mm closed' }, { label: 'Weight', value: '34g' }], images: ['pen-fountain', 'pen-nib', 'pen-cap', 'pen-case'], story: 'The Plume d\'Or has been produced without interruption since 1936. Each nib is ground by a single nib-master — currently Henri Lacroix, who has held the post since 1991. He produces approximately 340 nibs per year.' }
 ];
 
-export const DEFAULT_SITE_CONFIG: SiteConfig = {
-  hero: {
-    eyebrow: 'Maison Héritage · Paris · 1923',
-    title: 'Objects considered<br>with the <em>patience</em><br>of the hand.',
-    subtitle: 'A French house producing timepieces, footwear, leather goods, garments and objets in limited number — each finished by a single artisan, registered for life, intended to outlast its first owner.',
-    imageSeed: 'maison-hero-atelier',
-    metaNum: 'N° 01',
-    metaText: 'Atelier, rue de la Paix<br>6ᵉ arrondissement'
-  },
-  marqueeItems: ['Timepieces', 'Footwear', 'Leather Goods', 'Parfum', 'Garments', 'Accessories', 'Jewellery', 'Objets'],
-  manifesto: {
-    label: 'A note from the maison',
-    quote: 'We do not produce <em>collections</em>. We produce <em>objects</em> — slowly, in numbered series, intended to be carried, wound, worn and written with for longer than they were made.',
-    attribution: 'Étienne Héritage',
-    role: 'Directeur, fourth generation'
-  },
-  categories: [
-    { name: 'Timepieces', imageSeed: 'cat-timepieces' },
-    { name: 'Footwear', imageSeed: 'cat-footwear' },
-    { name: 'Leather Goods', imageSeed: 'cat-leather-goods' },
-    { name: 'Parfum', imageSeed: 'cat-parfum' },
-    { name: 'Garments', imageSeed: 'cat-garments' },
-    { name: 'Accessories', imageSeed: 'cat-accessories' },
-    { name: 'Jewellery', imageSeed: 'cat-jewellery' },
-    { name: 'Objets', imageSeed: 'cat-objets' }
-  ],
-  featured: {
-    title: 'Three objects<br>from the <em>current series</em>.'
-  },
-  atelier: {
-    label: 'The atelier',
-    title: 'A single room.<br>A single <em>artisan</em><br>per object.',
-    intro: 'Our Paris atelier occupies the same 340m² we have occupied since 1923. Twenty-three artisans work there, each completing an object from first cut to final inspection. No object passes through more than one pair of hands.',
-    stats: [
-      { num: '1923', label: 'Year founded' },
-      { num: '23', label: 'Artisans in-house' },
-      { num: '4', label: 'Generations' },
-      { num: '340m²', label: 'Atelier, rue de la Paix' }
-    ],
-    images: [
-      { seed: 'atelier-bench-wide', caption: '— The watchmaker\'s bench, second floor.', wide: true },
-      { seed: 'atelier-leather-tall', caption: '— Cutting Taurillon Clymène for the Ministre briefcase.', wide: false },
-      { seed: 'atelier-stitching', caption: '— Saddle-stitching, 8 stitches per inch, waxed linen.', wide: true }
-    ]
-  },
-  principles: [
-    { num: 'I', name: 'One object, one hand', desc: 'Each object is completed by a single artisan from first cut to final inspection. No division of labour.', detail: 'Principle · 1923' },
-    { num: 'II', name: 'Numbered and registered', desc: 'Every object carries a number, a date and the maker\'s mark. We maintain the register in perpetuity.', detail: 'Principle · 1923' },
-    { num: 'III', name: 'No object before its time', desc: 'We do not release objects to a calendar. A pen takes 14 weeks. A tourbillon takes 11 months. We wait.', detail: 'Principle · 1923' },
-    { num: 'IV', name: 'Repair, not replace', desc: 'We maintain every object we have made since 1923. The register allows us to restore to original specification.', detail: 'Principle · 1923' },
-    { num: 'V', name: 'Material provenance', desc: 'Leather, gold, silk, crystal — each material is traceable to a named supplier, often a single farm or mine.', detail: 'Principle · 1923' },
-    { num: 'VI', name: 'No discount, ever', desc: 'The price is the price. It reflects the hours and the materials. It does not move.', detail: 'Principle · 1923' }
-  ],
-  footer: {
-    brand: 'Maison<br>Héritage',
-    tag: 'An atelier of considered objects, established in Paris, 1923. Timepieces, footwear, leather goods, garments and objets — produced in limited number, by hand, intended for life.',
-    columns: [
-      { title: 'Maison', links: [{ label: 'Heritage', href: '/' }, { label: 'The Atelier', href: '/atelier' }, { label: 'Collections', href: '/shop' }, { label: 'Journal' }] },
-      { title: 'Concierge', links: [{ label: 'Private Appointments' }, { label: 'Bespoke Commissions' }, { label: 'Restoration' }, { label: 'WhatsApp Concierge' }] },
-      { title: 'Legal', links: [{ label: 'Terms of Acquisition' }, { label: 'Privacy Charter' }, { label: 'Cookies' }, { label: 'Impressum' }] }
-    ],
-    copyright: '© 1923—2024 Maison Héritage SA · Paris · Geneva · Tokyo',
-    tagline: 'Crafted with restraint'
-  },
-  shop: {
-    title: 'The <em>collections</em>.',
-    subtitle: 'All current objects, listed by category. Each is produced in limited number by a single artisan. Click an object to view its specification, provenance and to enquire directly with the maison.'
-  },
-  atelierPage: {
-    heroEyebrow: 'The atelier · 1923',
-    heroTitle: '340 square metres.<br>Twenty-three <em>hands</em>.<br>One century of method.',
-    heroSub: 'The Maison Héritage atelier has occupied the same premises on the rue de la Paix since the founding year. It has never been enlarged, franchised or relocated. We work there still.',
-    heroImageSeed: 'atelier-main-room',
-    heroMetaNum: 'N° 02',
-    heroMetaText: 'The atelier, second floor<br>rue de la Paix, Paris',
-    sectionLabel: 'Method',
-    sectionTitle: 'A single <em>artisan</em><br>completes each object.',
-    sectionIntro: 'There is no production line. A watchmaker assembles, regulates and seals a tourbillon. A leatherworker cuts, stitches and finishes a briefcase. The maker\'s mark is on the inside. Their name is on the register.',
-    stats: [
-      { num: '23', label: 'Artisans' },
-      { num: '14', label: 'Apprentices' },
-      { num: '7', label: 'Years to master' },
-      { num: '1923', label: 'Continuous tenure' }
-    ],
-    images: [
-      { seed: 'atelier-watch-bench', caption: '— Henri Lacroix at the nib bench, 2024.', wide: true },
-      { seed: 'atelier-tools-tall', caption: '— The founder\'s tool cabinet, unchanged since 1923.', wide: false },
-      { seed: 'atelier-garment', caption: '— Cutting the Ambassadeur overcoat, third fitting.', wide: true },
-      { seed: 'atelier-perfume-tall', caption: '— Camille Roche, composing between dusk and midnight.', wide: false }
-    ],
-    principlesTitle: 'The <em>register</em>,<br>kept since 1923.',
-    principlesIntro: 'Every object produced by the maison is recorded. Below, a partial list of the disciplines practised at our bench today.',
-    principles: [
-      { num: 'I', name: 'Watchmaking', desc: 'Tourbillons, perpetual calendars, minute repeaters. Assembled and regulated by a single watchmaker.', detail: 'Atelier · 1st floor' },
-      { num: 'II', name: 'Leatherwork', desc: 'Saddle-stitched briefcases, wallets, luggage. Cut, stitched and finished by one leatherworker.', detail: 'Atelier · 2nd floor' },
-      { num: 'III', name: 'Footwear', desc: 'Whole-cut Oxfords, loafers, boots. Lasted and closed in Northampton, finished in Paris.', detail: 'Workshop · Northampton' },
-      { num: 'IV', name: 'Tailoring', desc: 'Bespoke overcoats, jackets, trousers. Three fittings, hand-canvassed, twelve weeks.', detail: 'Atelier · 2nd floor' },
-      { num: 'V', name: 'Perfumery', desc: 'Extraits de parfum, composed by Camille Roche between dusk and midnight. Bottled in crystal.', detail: 'Atelier · 3rd floor' },
-      { num: 'VI', name: 'Goldsmithing', desc: 'Cufflinks, signed jewels, watch cases. Cast, set and finished in our Paris bench.', detail: 'Atelier · 1st floor' },
-      { num: 'VII', name: 'Lacquerwork', desc: 'Pen bodies, coffrets, foulard screens. Seven coats of urushi, cured in cedar humidors.', detail: 'Atelier · 3rd floor' },
-      { num: 'VIII', name: 'Engraving', desc: 'Skeletonised dials, seal engravings, monograms. Hand-cut with gravers and chisels.', detail: 'Atelier · 1st floor' }
-    ]
+;
+
+export async function loadProducts(): Promise<Product[]> {
+  try {
+    const dbProducts = await prisma.product.findMany({
+      where: { isPublished: true },
+      orderBy: { name: 'asc' }
+    });
+
+    return dbProducts.map(p => ({
+      id: p.id,
+      name: p.name,
+      nameEm: p.nameEm || undefined,
+      category: p.category.name,
+      price: p.price,
+      sku: p.sku,
+      year: p.year.toString(),
+      tag: p.tag,
+      description: p.description,
+      specs: Array.isArray(p.specs) ? (p.specs as Spec[]) : [],
+      images: p.images || [],
+      story: p.story
+    }));
+  } catch (error) {
+    console.error('Error loading products from database:', error);
+    return DEFAULT_PRODUCTS;
   }
-};
+}
 
-export function loadProducts(): Product[] {
+export async function saveProducts(products: Product[]): Promise<void> {
   try {
-    const stored = localStorage.getItem('mh_products');
-    if (stored) return JSON.parse(stored);
-  } catch (_) {}
-  localStorage.setItem('mh_products', JSON.stringify(DEFAULT_PRODUCTS));
-  return [...DEFAULT_PRODUCTS];
+    const categoryMap = new Map<string, string>();
+
+    for (const product of products) {
+      const category = await prisma.category.upsert({
+        where: { name: product.category },
+        update: {},
+        create: { name: product.category, imageUrl: [] }
+      });
+      categoryMap.set(product.category, category.id);
+
+      await prisma.product.upsert({
+        where: { id: product.id },
+        update: {
+          name: product.name,
+          nameEm: product.nameEm || null,
+          categoryId: categoryMap.get(product.category)!,
+          sku: product.sku,
+          price: product.price,
+          year: parseInt(product.year),
+          tag: product.tag,
+          description: product.description,
+          specs: product.specs as any,
+          images: product.images || [],
+          story: product.story,
+          isPublished: true
+        },
+        create: {
+          id: product.id,
+          name: product.name,
+          nameEm: product.nameEm || null,
+          categoryId: categoryMap.get(product.category)!,
+          sku: product.sku,
+          price: product.price,
+          year: parseInt(product.year),
+          tag: product.tag,
+          description: product.description,
+          specs: product.specs as any,
+          images: product.images || [],
+          story: product.story,
+          isPublished: true
+        }
+      });
+    }
+  } catch (error) {
+    console.error('Error saving products to database:', error);
+  }
 }
 
-export function saveProducts(products: Product[]) {
-  localStorage.setItem('mh_products', JSON.stringify(products));
-}
-
-export function resetProducts(): Product[] {
-  localStorage.removeItem('mh_products');
-  return loadProducts();
-}
-
-export function loadConfig(): SiteConfig {
+export async function resetProducts(): Promise<Product[]> {
   try {
-    const stored = localStorage.getItem('mh_config');
-    if (stored) return JSON.parse(stored);
-  } catch (_) {}
-  localStorage.setItem('mh_config', JSON.stringify(DEFAULT_SITE_CONFIG));
-  return { ...DEFAULT_SITE_CONFIG, categories: [...DEFAULT_SITE_CONFIG.categories], marqueeItems: [...DEFAULT_SITE_CONFIG.marqueeItems], principles: [...DEFAULT_SITE_CONFIG.principles], atelier: { ...DEFAULT_SITE_CONFIG.atelier, stats: [...DEFAULT_SITE_CONFIG.atelier.stats], images: [...DEFAULT_SITE_CONFIG.atelier.images] }, footer: { ...DEFAULT_SITE_CONFIG.footer, columns: DEFAULT_SITE_CONFIG.footer.columns.map(c => ({ ...c, links: [...c.links] })) }, shop: { ...DEFAULT_SITE_CONFIG.shop }, atelierPage: { ...DEFAULT_SITE_CONFIG.atelierPage, stats: [...DEFAULT_SITE_CONFIG.atelierPage.stats], images: [...DEFAULT_SITE_CONFIG.atelierPage.images], principles: [...DEFAULT_SITE_CONFIG.atelierPage.principles] } };
+    await prisma.product.deleteMany({});
+    const products = await loadProducts();
+    await saveProducts(products);
+    return products;
+  } catch (error) {
+    console.error('Error resetting products:', error);
+    return DEFAULT_PRODUCTS;
+  }
 }
 
-export function saveConfig(config: SiteConfig) {
-  localStorage.setItem('mh_config', JSON.stringify(config));
+export async function loadConfig(): Promise<SiteConfig> {
+  try {
+    const siteConfig = await prisma.siteConfig.findFirst({
+      where: { id: 1 }
+    });
+
+    if (!siteConfig) {
+      return DEFAULT_SITE_CONFIG;
+    }
+
+    const categories = (siteConfig.categories as { name: string; imageSeed: string }[]) || DEFAULT_SITE_CONFIG.categories;
+    const marqueeItems = (siteConfig.marqueeItems as string[]) || DEFAULT_SITE_CONFIG.marqueeItems;
+    const principles = (siteConfig.principles as ConfigPrinciple[]) || DEFAULT_SITE_CONFIG.principles;
+
+    return {
+      hero: (siteConfig.hero as SiteConfig['hero']) || DEFAULT_SITE_CONFIG.hero,
+      marqueeItems,
+      manifesto: (siteConfig.manifesto as SiteConfig['manifesto']) || DEFAULT_SITE_CONFIG.manifesto,
+      categories,
+      featured: (siteConfig.featured as SiteConfig['featured']) || DEFAULT_SITE_CONFIG.featured,
+      atelier: (siteConfig.atelier as SiteConfig['atelier']) || DEFAULT_SITE_CONFIG.atelier,
+      principles,
+      footer: (siteConfig.footer as SiteConfig['footer']) || DEFAULT_SITE_CONFIG.footer,
+      shop: (siteConfig.shop as SiteConfig['shop']) || DEFAULT_SITE_CONFIG.shop,
+      atelierPage: (siteConfig.atelierPage as SiteConfig['atelierPage']) || DEFAULT_SITE_CONFIG.atelierPage
+    };
+  } catch (error) {
+    console.error('Error loading site config from database:', error);
+    return DEFAULT_SITE_CONFIG;
+  }
 }
 
-export function resetConfig(): SiteConfig {
-  localStorage.removeItem('mh_config');
-  return loadConfig();
+export async function saveConfig(config: SiteConfig): Promise<void> {
+  try {
+    await prisma.siteConfig.upsert({
+      where: { id: 1 },
+      update: {
+        hero: config.hero,
+        marqueeItems: config.marqueeItems,
+        manifesto: config.manifesto,
+        categories: config.categories,
+        featured: config.featured,
+        atelier: config.atelier,
+        principles: config.principles,
+        footer: config.footer,
+        shop: config.shop,
+        atelierPage: config.atelierPage
+      },
+      create: {
+        id: 1,
+        hero: config.hero,
+        marqueeItems: config.marqueeItems,
+        manifesto: config.manifesto,
+        categories: config.categories,
+        featured: config.featured,
+        atelier: config.atelier,
+        principles: config.principles,
+        footer: config.footer,
+        shop: config.shop,
+        atelierPage: config.atelierPage
+      }
+    });
+  } catch (error) {
+    console.error('Error saving site config to database:', error);
+  }
+}
+
+export async function resetConfig(): Promise<SiteConfig> {
+  try {
+    await prisma.siteConfig.deleteMany({});
+    const fresh = await loadConfig();
+    await saveConfig(fresh);
+    return fresh;
+  } catch (error) {
+    console.error('Error resetting site config:', error);
+    return DEFAULT_SITE_CONFIG;
+  }
 }
