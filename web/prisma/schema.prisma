@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  imageUrl   String[]
+
+  products    Product[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Product {
+  id            String    @id @default(cuid())
+
+  /// Original id like p1, p2
+  externalId    String?   @unique
+
+  name          String
+  nameEm        String?
+
+  categoryId    String
+  category      Category  @relation(fields: [categoryId], references: [id])
+
+  sku           String    @unique
+
+  /// Store raw value (5335000.00), format on frontend
+  price         Decimal   @db.Decimal(12,2)
+  currency      String    @default("INR")
+
+  year          Int
+  tag           String
+
+  description   String    @db.Text
+  story         String    @db.Text
+
+  /// [{ label, value }]
+  specs         Json
+
+  /// ["image1","image2","image3"]
+  images        String[]
+
+  isFeatured    Boolean   @default(false)
+  isPublished   Boolean   @default(true)
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([categoryId])
+  @@index([sku])
+  @@index([name])
+}
+
+model SiteConfig {
+  /// Singleton row
+  id          Int       @id @default(1)
+
+  /// Hero section
+  hero         Json
+
+  /// ["Timepieces","Footwear",...]
+  marqueeItems Json
+
+  /// Manifesto object
+  manifesto    Json
+
+  /// [{ name, imageSeed }]
+  categories   Json
+
+  /// Featured section
+  featured     Json
+
+  /// Atelier section
+  atelier      Json
+
+  /// Principles array
+  principles   Json
+
+  /// Footer object
+  footer       Json
+
+  /// Shop page
+  shop         Json
+
+  /// Atelier page
+  atelierPage  Json
+
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
