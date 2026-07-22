@@ -140,7 +140,11 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
     principles: cfg.atelierPage.principles.map(p => `${p.num}|${p.name}|${p.desc}|${p.detail}`).join('\n')
   });
 
-  useEffect(() => { loadProducts().then(setProducts); }, []);
+  useEffect(() => { 
+    if (typeof window !== 'undefined') {
+      loadProducts().then(setProducts);
+    }
+  }, []);
 
   const showToast = useCallback((msg: string) => {
     setToast(msg);
@@ -579,8 +583,16 @@ export default function AdminPage() {
   const [authed, setAuthed] = useState(false);
   const [cfg, setCfg] = useState<SiteConfig | null>(null);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  // Ensure we're on the client side before doing any database operations
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
+    if (!mounted) return;
+    
     const token = localStorage.getItem('mh_admin_token');
     if (!token) {
       setLoading(false);
@@ -601,7 +613,7 @@ export default function AdminPage() {
     }).catch(() => {
       localStorage.removeItem('mh_admin_token');
     }).finally(() => setLoading(false));
-  }, []);
+  }, [mounted]);
 
   const handleLogin = async () => {
     setAuthed(true);
@@ -614,7 +626,7 @@ export default function AdminPage() {
     setAuthed(false);
   };
 
-  if (loading) return null;
+  if (!mounted || loading) return null;
 
   if (!authed) return <LoginForm onLogin={handleLogin} />;
   if (!cfg) return null;

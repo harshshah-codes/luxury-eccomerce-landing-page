@@ -316,6 +316,11 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
 };
 
 export async function loadProducts(): Promise<Product[]> {
+  // Only run database operations on client side
+  if (typeof window === 'undefined') {
+    return DEFAULT_PRODUCTS;
+  }
+
   try {
     const dbProducts = await prisma.product.findMany({
       where: { isPublished: true },
@@ -406,6 +411,11 @@ export async function resetProducts(): Promise<Product[]> {
 }
 
 export async function loadConfig(): Promise<SiteConfig> {
+  // Only run database operations on client side
+  if (typeof window === 'undefined') {
+    return DEFAULT_SITE_CONFIG;
+  }
+
   try {
     const siteConfig = await prisma.siteConfig.findFirst({
       where: { id: 1 }
