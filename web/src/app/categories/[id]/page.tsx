@@ -11,9 +11,16 @@ export default function CategoryProductsPage() {
   const params = useParams();
   const categorySlug = params.id as string;
   const [cfg, setCfg] = useState<SiteConfig | null>(null);
+  const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    setCfg(loadConfig());
+    const loadData = async () => {
+      const config = await loadConfig();
+      const allProducts = await loadProducts();
+      setCfg(config);
+      setProducts(allProducts);
+    };
+    loadData();
   }, []);
 
   useEffect(() => {
@@ -21,9 +28,8 @@ export default function CategoryProductsPage() {
     initRevealObserver();
   }, [cfg]);
 
-  if (!cfg) return null;
+  if (!cfg || products.length === 0) return null;
 
-  const products = loadProducts();
   const filterNormalized = categorySlug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
   const filtered = products.filter(p => p.category === filterNormalized);
 

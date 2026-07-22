@@ -1,4 +1,93 @@
-import { prisma } from '@/lib/prisma';
+// Only initialize Prisma on client side
+let prisma: any = null;
+
+export async function getPrisma() {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+  
+  if (!prisma) {
+    const { PrismaClient } = await import('@prisma/client');
+    const globalForPrisma = globalThis as unknown as {
+      prisma: any | undefined;
+    };
+    prisma = globalForPrisma.prisma ?? new PrismaClient();
+    if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+  }
+  
+  return prisma;
+}
+
+// Type-safe JSON conversion helpers
+function isConfigPrinciple(obj: any): obj is ConfigPrinciple {
+  return obj && 
+    typeof obj.num === 'string' && 
+    typeof obj.name === 'string' && 
+    typeof obj.desc === 'string' && 
+    typeof obj.detail === 'string';
+}
+
+function isConfigStat(obj: any): obj is ConfigStat {
+  return obj && 
+    typeof obj.num === 'string' && 
+    typeof obj.label === 'string';
+}
+
+function isConfigImage(obj: any): obj is ConfigImage {
+  return obj && 
+    typeof obj.seed === 'string' && 
+    typeof obj.caption === 'string' && 
+    typeof obj.wide === 'boolean';
+}
+
+function isFooterColumn(obj: any): obj is FooterColumn {
+  return obj && 
+    typeof obj.title === 'string' && 
+    Array.isArray(obj.links);
+}
+
+function convertToConfigPrinciples(data: any): ConfigPrinciple[] {
+  if (!Array.isArray(data)) return DEFAULT_SITE_CONFIG.principles;
+  return data
+    .filter(isConfigPrinciple)
+    .map(p => ({
+      num: p.num,
+      name: p.name,
+      desc: p.desc,
+      detail: p.detail
+    }));
+}
+
+function convertToConfigStats(data: any): ConfigStat[] {
+  if (!Array.isArray(data)) return DEFAULT_SITE_CONFIG.atelier.stats;
+  return data
+    .filter(isConfigStat)
+    .map(s => ({
+      num: s.num,
+      label: s.label
+    }));
+}
+
+function convertToConfigImages(data: any): ConfigImage[] {
+  if (!Array.isArray(data)) return DEFAULT_SITE_CONFIG.atelier.images;
+  return data
+    .filter(isConfigImage)
+    .map(i => ({
+      seed: i.seed,
+      caption: i.caption,
+      wide: i.wide
+    }));
+}
+
+function convertToFooterColumns(data: any): FooterColumn[] {
+  if (!Array.isArray(data)) return DEFAULT_SITE_CONFIG.footer.columns;
+  return data
+    .filter(isFooterColumn)
+    .map(c => ({
+      title: c.title,
+      links: c.links
+    }));
+}
 
 export interface Spec {
   label: string;
@@ -111,27 +200,159 @@ export const DEFAULT_PRODUCTS: Product[] = [
   { id: 'p8', name: 'Plume d\'Or', nameEm: 'Plume d\'Or', category: 'Objets', price: '₹ 2,03,500', sku: 'MH-OB-011', year: '2024', tag: 'Cartridge · 18k', description: 'A fountain pen in lacquered brass with an 18k solid gold nib, ground by hand to a flexible stub. Cartridge/converter fill. The body is turned on the same 1936 lathe used for our first pen, finished in seven coats of black urushi.', specs: [{ label: 'Nib', value: '18k solid gold, hand-ground flexible stub' }, { label: 'Body', value: 'Brass, 7 coats black urushi' }, { label: 'Fill', value: 'Cartridge or converter' }, { label: 'Lathe', value: 'Original 1936 cast-iron original' }, { label: 'Length', value: '142mm closed' }, { label: 'Weight', value: '34g' }], images: ['pen-fountain', 'pen-nib', 'pen-cap', 'pen-case'], story: 'The Plume d\'Or has been produced without interruption since 1936. Each nib is ground by a single nib-master — currently Henri Lacroix, who has held the post since 1991. He produces approximately 340 nibs per year.' }
 ];
 
-;
+export const DEFAULT_SITE_CONFIG: SiteConfig = {
+  hero: {
+    eyebrow: 'Maison Horlogère',
+    title: 'The Art of Time',
+    subtitle: 'Handcrafted timepieces since 1923',
+    imageSeed: 'luxury-watch',
+    metaNum: '1923',
+    metaText: 'Founded'
+  },
+  marqueeItems: [
+    'Handcrafted Excellence',
+    'Limited Editions',
+    'Master Watchmakers',
+    'Timeless Design'
+  ],
+  manifesto: {
+    label: 'Our Promise',
+    quote: 'We believe that true luxury lies in the perfect harmony of form and function, where every detail is considered and every piece tells a story.',
+    attribution: 'Jean-Claude Bernard',
+    role: 'Master Watchmaker'
+  },
+  categories: [
+    { name: 'Timepieces', imageSeed: 'watches' },
+    { name: 'Footwear', imageSeed: 'shoes' },
+    { name: 'Leather Goods', imageSeed: 'leather' },
+    { name: 'Parfum', imageSeed: 'perfume' },
+    { name: 'Garments', imageSeed: 'clothing' },
+    { name: 'Accessories', imageSeed: 'accessories' },
+    { name: 'Jewellery', imageSeed: 'jewelry' },
+    { name: 'Objets', imageSeed: 'objects' }
+  ],
+  featured: {
+    title: 'Featured Creations'
+  },
+  atelier: {
+    label: 'Our Atelier',
+    title: 'Craftsmanship Excellence',
+    intro: 'Every piece that bears our name is created in our Paris atelier, where master craftsmen apply techniques perfected over a century.',
+    stats: [
+      { num: '100', label: 'Years of Heritage' },
+      { num: '50', label: 'Master Craftsmen' },
+      { num: '240', label: 'Hours per Piece' },
+      { num: '100', label: 'Client Satisfaction' }
+    ],
+    images: [
+      { seed: 'atelier-workshop', caption: 'The main workshop', wide: true },
+      { seed: 'atelier-tools', caption: 'Traditional tools', wide: false },
+      { seed: 'atelier-craftsman', caption: 'Master craftsman at work', wide: false }
+    ]
+  },
+  principles: [
+    { num: '01', name: 'Heritage', desc: 'Respecting tradition while embracing innovation', detail: 'Since 1923, we have preserved the techniques and values that define true craftsmanship.' },
+    { num: '02', name: 'Excellence', desc: 'Perfection in every detail', detail: 'Every piece undergoes rigorous quality control by our master craftsmen.' },
+    { num: '03', name: 'Exclusivity', desc: 'Limited production runs', detail: 'Each creation is produced in limited quantities to maintain exclusivity and quality.' },
+    { num: '04', name: 'Sustainability', desc: 'Responsible luxury', detail: 'We source materials ethically and minimize our environmental impact.' }
+  ],
+  footer: {
+    brand: 'Maison Horlogère',
+    tag: 'The Art of Time',
+    columns: [
+      {
+        title: 'Collections',
+        links: [
+          { label: 'Timepieces', href: '/shop' },
+          { label: 'Footwear', href: '/shop' },
+          { label: 'Leather Goods', href: '/shop' },
+          { label: 'Parfum', href: '/shop' }
+        ]
+      },
+      {
+        title: 'Atelier',
+        links: [
+          { label: 'Our Craft', href: '/atelier' },
+          { label: 'Bespoke Service', href: '/atelier' },
+          { label: 'Care Guide', href: '/care' }
+        ]
+      },
+      {
+        title: 'Company',
+        links: [
+          { label: 'About Us', href: '/about' },
+          { label: 'Heritage', href: '/heritage' },
+          { label: 'Contact', href: '/contact' }
+        ]
+      }
+    ],
+    copyright: '© 2024 Maison Horlogère. All rights reserved.',
+    tagline: 'Crafting time since 1923'
+  },
+  shop: {
+    title: 'Our Collections',
+    subtitle: 'Discover our curated selection of exceptional creations'
+  },
+  atelierPage: {
+    heroEyebrow: 'Craftsmanship Excellence',
+    heroTitle: 'The Maison Atelier',
+    heroSub: 'Where tradition meets innovation',
+    heroImageSeed: 'atelier-hero',
+    heroMetaNum: '1923',
+    heroMetaText: 'Heritage',
+    sectionLabel: 'Our Craft',
+    sectionTitle: 'Timeless Techniques',
+    sectionIntro: 'For over a century, our master craftsmen have perfected techniques that blend traditional methods with modern innovation.',
+    stats: [
+      { num: '100', label: 'Years of Excellence' },
+      { num: '50', label: 'Master Craftsmen' },
+      { num: '240', label: 'Hours per Piece' },
+      { num: '100', label: 'Client Satisfaction' }
+    ],
+    images: [
+      { seed: 'atelier-workshop', caption: 'The main workshop', wide: true },
+      { seed: 'atelier-tools', caption: 'Traditional tools', wide: false },
+      { seed: 'atelier-craftsman', caption: 'Master craftsman at work', wide: false }
+    ],
+    principlesTitle: 'Our Principles',
+    principlesIntro: 'We are guided by four core principles that define our approach to craftsmanship and luxury.',
+    principles: [
+      { num: '01', name: 'Heritage', desc: 'Respecting tradition while embracing innovation', detail: 'Since 1923, we have preserved the techniques and values that define true craftsmanship.' },
+      { num: '02', name: 'Excellence', desc: 'Perfection in every detail', detail: 'Every piece undergoes rigorous quality control by our master craftsmen.' },
+      { num: '03', name: 'Exclusivity', desc: 'Limited production runs', detail: 'Each creation is produced in limited quantities to maintain exclusivity and quality.' },
+      { num: '04', name: 'Sustainability', desc: 'Responsible luxury', detail: 'We source materials ethically and minimize our environmental impact.' }
+    ]
+  }
+};
 
 export async function loadProducts(): Promise<Product[]> {
+  // Only run database operations on client side
+  if (typeof window === 'undefined') {
+    return DEFAULT_PRODUCTS;
+  }
+
   try {
+    const prisma = await getPrisma();
+    if (!prisma) return DEFAULT_PRODUCTS;
+
     const dbProducts = await prisma.product.findMany({
       where: { isPublished: true },
+      include: { category: true },
       orderBy: { name: 'asc' }
     });
 
-    return dbProducts.map(p => ({
+    return dbProducts.map((p: any) => ({
       id: p.id,
       name: p.name,
       nameEm: p.nameEm || undefined,
       category: p.category.name,
-      price: p.price,
+      price: p.price.toString(),
       sku: p.sku,
       year: p.year.toString(),
       tag: p.tag,
       description: p.description,
-      specs: Array.isArray(p.specs) ? (p.specs as Spec[]) : [],
-      images: p.images || [],
+      specs: Array.isArray(p.specs) ? (p.specs as unknown as Spec[]) : [],
+      images: Array.isArray(p.images) ? (p.images as string[]) : [],
       story: p.story
     }));
   } catch (error) {
@@ -142,6 +363,9 @@ export async function loadProducts(): Promise<Product[]> {
 
 export async function saveProducts(products: Product[]): Promise<void> {
   try {
+    const prisma = await getPrisma();
+    if (!prisma) return;
+
     const categoryMap = new Map<string, string>();
 
     for (const product of products) {
@@ -163,7 +387,7 @@ export async function saveProducts(products: Product[]): Promise<void> {
           year: parseInt(product.year),
           tag: product.tag,
           description: product.description,
-          specs: product.specs as any,
+          specs: JSON.stringify(product.specs),
           images: product.images || [],
           story: product.story,
           isPublished: true
@@ -178,7 +402,7 @@ export async function saveProducts(products: Product[]): Promise<void> {
           year: parseInt(product.year),
           tag: product.tag,
           description: product.description,
-          specs: product.specs as any,
+          specs: JSON.stringify(product.specs),
           images: product.images || [],
           story: product.story,
           isPublished: true
@@ -192,8 +416,11 @@ export async function saveProducts(products: Product[]): Promise<void> {
 
 export async function resetProducts(): Promise<Product[]> {
   try {
+    const prisma = await getPrisma();
+    if (!prisma) return DEFAULT_PRODUCTS;
+
     await prisma.product.deleteMany({});
-    const products = await loadProducts();
+    const products = DEFAULT_PRODUCTS;
     await saveProducts(products);
     return products;
   } catch (error) {
@@ -203,7 +430,15 @@ export async function resetProducts(): Promise<Product[]> {
 }
 
 export async function loadConfig(): Promise<SiteConfig> {
+  // Only run database operations on client side
+  if (typeof window === 'undefined') {
+    return DEFAULT_SITE_CONFIG;
+  }
+
   try {
+    const prisma = await getPrisma();
+    if (!prisma) return DEFAULT_SITE_CONFIG;
+
     const siteConfig = await prisma.siteConfig.findFirst({
       where: { id: 1 }
     });
@@ -212,21 +447,17 @@ export async function loadConfig(): Promise<SiteConfig> {
       return DEFAULT_SITE_CONFIG;
     }
 
-    const categories = (siteConfig.categories as { name: string; imageSeed: string }[]) || DEFAULT_SITE_CONFIG.categories;
-    const marqueeItems = (siteConfig.marqueeItems as string[]) || DEFAULT_SITE_CONFIG.marqueeItems;
-    const principles = (siteConfig.principles as ConfigPrinciple[]) || DEFAULT_SITE_CONFIG.principles;
-
     return {
-      hero: (siteConfig.hero as SiteConfig['hero']) || DEFAULT_SITE_CONFIG.hero,
-      marqueeItems,
-      manifesto: (siteConfig.manifesto as SiteConfig['manifesto']) || DEFAULT_SITE_CONFIG.manifesto,
-      categories,
-      featured: (siteConfig.featured as SiteConfig['featured']) || DEFAULT_SITE_CONFIG.featured,
-      atelier: (siteConfig.atelier as SiteConfig['atelier']) || DEFAULT_SITE_CONFIG.atelier,
-      principles,
-      footer: (siteConfig.footer as SiteConfig['footer']) || DEFAULT_SITE_CONFIG.footer,
-      shop: (siteConfig.shop as SiteConfig['shop']) || DEFAULT_SITE_CONFIG.shop,
-      atelierPage: (siteConfig.atelierPage as SiteConfig['atelierPage']) || DEFAULT_SITE_CONFIG.atelierPage
+      hero: siteConfig.hero ? JSON.parse(siteConfig.hero as string) : DEFAULT_SITE_CONFIG.hero,
+      marqueeItems: siteConfig.marqueeItems ? JSON.parse(siteConfig.marqueeItems as string) : DEFAULT_SITE_CONFIG.marqueeItems,
+      manifesto: siteConfig.manifesto ? JSON.parse(siteConfig.manifesto as string) : DEFAULT_SITE_CONFIG.manifesto,
+      categories: siteConfig.categories ? JSON.parse(siteConfig.categories as string) : DEFAULT_SITE_CONFIG.categories,
+      featured: siteConfig.featured ? JSON.parse(siteConfig.featured as string) : DEFAULT_SITE_CONFIG.featured,
+      atelier: siteConfig.atelier ? JSON.parse(siteConfig.atelier as string) : DEFAULT_SITE_CONFIG.atelier,
+      principles: siteConfig.principles ? JSON.parse(siteConfig.principles as string) : DEFAULT_SITE_CONFIG.principles,
+      footer: siteConfig.footer ? JSON.parse(siteConfig.footer as string) : DEFAULT_SITE_CONFIG.footer,
+      shop: siteConfig.shop ? JSON.parse(siteConfig.shop as string) : DEFAULT_SITE_CONFIG.shop,
+      atelierPage: siteConfig.atelierPage ? JSON.parse(siteConfig.atelierPage as string) : DEFAULT_SITE_CONFIG.atelierPage
     };
   } catch (error) {
     console.error('Error loading site config from database:', error);
@@ -239,29 +470,29 @@ export async function saveConfig(config: SiteConfig): Promise<void> {
     await prisma.siteConfig.upsert({
       where: { id: 1 },
       update: {
-        hero: config.hero,
-        marqueeItems: config.marqueeItems,
-        manifesto: config.manifesto,
-        categories: config.categories,
-        featured: config.featured,
-        atelier: config.atelier,
-        principles: config.principles,
-        footer: config.footer,
-        shop: config.shop,
-        atelierPage: config.atelierPage
+        hero: JSON.stringify(config.hero),
+        marqueeItems: JSON.stringify(config.marqueeItems),
+        manifesto: JSON.stringify(config.manifesto),
+        categories: JSON.stringify(config.categories),
+        featured: JSON.stringify(config.featured),
+        atelier: JSON.stringify(config.atelier),
+        principles: JSON.stringify(config.principles),
+        footer: JSON.stringify(config.footer),
+        shop: JSON.stringify(config.shop),
+        atelierPage: JSON.stringify(config.atelierPage)
       },
       create: {
         id: 1,
-        hero: config.hero,
-        marqueeItems: config.marqueeItems,
-        manifesto: config.manifesto,
-        categories: config.categories,
-        featured: config.featured,
-        atelier: config.atelier,
-        principles: config.principles,
-        footer: config.footer,
-        shop: config.shop,
-        atelierPage: config.atelierPage
+        hero: JSON.stringify(config.hero),
+        marqueeItems: JSON.stringify(config.marqueeItems),
+        manifesto: JSON.stringify(config.manifesto),
+        categories: JSON.stringify(config.categories),
+        featured: JSON.stringify(config.featured),
+        atelier: JSON.stringify(config.atelier),
+        principles: JSON.stringify(config.principles),
+        footer: JSON.stringify(config.footer),
+        shop: JSON.stringify(config.shop),
+        atelierPage: JSON.stringify(config.atelierPage)
       }
     });
   } catch (error) {
@@ -272,7 +503,7 @@ export async function saveConfig(config: SiteConfig): Promise<void> {
 export async function resetConfig(): Promise<SiteConfig> {
   try {
     await prisma.siteConfig.deleteMany({});
-    const fresh = await loadConfig();
+    const fresh = DEFAULT_SITE_CONFIG;
     await saveConfig(fresh);
     return fresh;
   } catch (error) {

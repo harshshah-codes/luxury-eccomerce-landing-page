@@ -9,9 +9,16 @@ import Footer from '@/components/footer';
 
 export default function HomePage() {
   const [cfg, setCfg] = useState<SiteConfig | null>(null);
+  const [products, setProducts] = useState<any[]>([]);
 
   useEffect(() => {
-    setCfg(loadConfig());
+    const loadData = async () => {
+      const config = await loadConfig();
+      const allProducts = await loadProducts();
+      setCfg(config);
+      setProducts(allProducts);
+    };
+    loadData();
   }, []);
 
   useEffect(() => {
@@ -20,9 +27,8 @@ export default function HomePage() {
     initRevealObserver();
   }, [cfg]);
 
-  if (!cfg) return null;
+  if (!cfg || products.length === 0) return null;
 
-  const products = loadProducts();
   const featured = products.slice(0, 3);
   const h = cfg.hero;
   const marqueeItems = cfg.marqueeItems;

@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const WHATSAPP_NUMBER = '33142000000';
 
 export function whatsappLink(productName: string, sku: string) {

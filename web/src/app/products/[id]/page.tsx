@@ -17,13 +17,16 @@ export default function ProductDetailPage() {
   const [mainImage, setMainImage] = useState('');
 
   useEffect(() => {
-    const config = loadConfig();
-    const products = loadProducts();
-    setCfg(config);
-    setAllProducts(products);
-    const p = products.find(x => x.id === id);
-    setProduct(p);
-    if (p) setMainImage(img(p.images[0], 900, 1125));
+    const loadData = async () => {
+      const config = await loadConfig();
+      const products = await loadProducts();
+      setCfg(config);
+      setAllProducts(products);
+      const p = products.find(x => x.id === id);
+      setProduct(p);
+      if (p) setMainImage(img(p.images[0], 900, 1125));
+    };
+    loadData();
   }, [id]);
 
   useEffect(() => {

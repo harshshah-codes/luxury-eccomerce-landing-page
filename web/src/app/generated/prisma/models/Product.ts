@@ -422,7 +422,7 @@ export type ProductCreateInput = {
   name: string
   nameEm?: string | null
   sku: string
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   year: number
   tag: string
@@ -444,7 +444,7 @@ export type ProductUncheckedCreateInput = {
   nameEm?: string | null
   categoryId: string
   sku: string
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   year: number
   tag: string
@@ -507,7 +507,7 @@ export type ProductCreateManyInput = {
   nameEm?: string | null
   categoryId: string
   sku: string
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   year: number
   tag: string
@@ -722,7 +722,7 @@ export type ProductCreateWithoutCategoryInput = {
   name: string
   nameEm?: string | null
   sku: string
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   year: number
   tag: string
@@ -742,7 +742,7 @@ export type ProductUncheckedCreateWithoutCategoryInput = {
   name: string
   nameEm?: string | null
   sku: string
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   year: number
   tag: string
@@ -812,7 +812,7 @@ export type ProductCreateManyCategoryInput = {
   name: string
   nameEm?: string | null
   sku: string
-  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  price?: runtime.Decimal | runtime.DecimalJsLike | number | string
   currency?: string
   year: number
   tag: string
