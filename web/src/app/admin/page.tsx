@@ -155,7 +155,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
   // ------- Product CRUD -------
   const resetPf = () => setPf({ name: '', category: cfg.categories[0]?.name || 'Timepieces', price: '', sku: '', year: '2024', tag: '', description: '', specs: '', images: '', story: '' });
 
-  const handleProductSave = () => {
+  const handleProductSave = async () => {
     if (!pf.name.trim()) { showToast('A name is required'); return; }
     const specs = pf.specs.split('\n').filter(Boolean).map(l => {
       const [label, ...rest] = l.split(':');
@@ -199,7 +199,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
     });
   };
 
-  const handleProductDelete = (id: string) => {
+  const handleProductDelete = async (id: string) => {
     const p = products.find(x => x.id === id);
     if (!p || !confirm(`Remove "${p.name}" from the register?`)) return;
     const updated = products.filter(x => x.id !== id);
