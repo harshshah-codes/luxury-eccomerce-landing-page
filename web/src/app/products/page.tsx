@@ -12,8 +12,13 @@ export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    setCfg(loadConfig());
-    setProducts(loadProducts());
+    const loadData = async () => {
+      const config = await loadConfig();
+      const allProducts = await loadProducts();
+      setCfg(config);
+      setProducts(allProducts);
+    };
+    loadData();
   }, []);
 
   useEffect(() => {
@@ -21,7 +26,7 @@ export default function ProductsPage() {
     initRevealObserver();
   }, [cfg]);
 
-  if (!cfg) return null;
+  if (!cfg || products.length === 0) return null;
 
   return (
     <div className="page-fade">

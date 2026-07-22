@@ -8,9 +8,16 @@ import Footer from '@/components/footer';
 
 export default function CategoriesPage() {
   const [cfg, setCfg] = useState<SiteConfig | null>(null);
+  const [products, setProducts] = useState<any[]>([]);
 
   useEffect(() => {
-    setCfg(loadConfig());
+    const loadData = async () => {
+      const config = await loadConfig();
+      const allProducts = await loadProducts();
+      setCfg(config);
+      setProducts(allProducts);
+    };
+    loadData();
   }, []);
 
   useEffect(() => {
@@ -18,9 +25,8 @@ export default function CategoriesPage() {
     initRevealObserver();
   }, [cfg]);
 
-  if (!cfg) return null;
+  if (!cfg || products.length === 0) return null;
 
-  const products = loadProducts();
   const cats = cfg.categories;
 
   return (
