@@ -1,12 +1,22 @@
-import { PrismaClient } from '@prisma/client';
+// Only initialize Prisma on client side
+let prisma: any = null;
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-};
-
-export const prisma = globalForPrisma.prisma ?? new PrismaClient();
-
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+export async function getPrisma() {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+  
+  if (!prisma) {
+    const { PrismaClient } = await import('@prisma/client');
+    const globalForPrisma = globalThis as unknown as {
+      prisma: any | undefined;
+    };
+    prisma = globalForPrisma.prisma ?? new PrismaClient();
+    if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+  }
+  
+  return prisma;
+}
 
 // Type-safe JSON conversion helpers
 function isConfigPrinciple(obj: any): obj is ConfigPrinciple {
@@ -322,13 +332,16 @@ export async function loadProducts(): Promise<Product[]> {
   }
 
   try {
+    const prisma = await getPrisma();
+    if (!prisma) return DEFAULT_PRODUCTS;
+
     const dbProducts = await prisma.product.findMany({
       where: { isPublished: true },
       include: { category: true },
       orderBy: { name: 'asc' }
     });
 
-    return dbProducts.map(p => ({
+    return dbProducts.map((p: any) => ({
       id: p.id,
       name: p.name,
       nameEm: p.nameEm || undefined,
@@ -350,6 +363,9 @@ export async function loadProducts(): Promise<Product[]> {
 
 export async function saveProducts(products: Product[]): Promise<void> {
   try {
+    const prisma = await getPrisma();
+    if (!prisma) return;
+
     const categoryMap = new Map<string, string>();
 
     for (const product of products) {
@@ -362,16 +378,16 @@ export async function saveProducts(products: Product[]): Promise<void> {
 
       await prisma.product.upsert({
         where: { id: product.id },
-update: {
-        name: product.name,
-        nameEm: product.nameEm || null,
-        categoryId: categoryMap.get(product.category)!,
-        sku: product.sku,
-        price: product.price,
-        year: parseInt(product.year),
-        tag: product.tag,
-        description: product.description,
-specs: JSON.stringify(product.specs),
+        update: {
+          name: product.name,
+          nameEm: product.nameEm || null,
+          categoryId: categoryMap.get(product.category)!,
+          sku: product.sku,
+          price: product.price,
+          year: parseInt(product.year),
+          tag: product.tag,
+          description: product.description,
+          specs: JSON.stringify(product.specs),
           images: product.images || [],
           story: product.story,
           isPublished: true
@@ -390,7 +406,7 @@ specs: JSON.stringify(product.specs),
           images: product.images || [],
           story: product.story,
           isPublished: true
-      }
+        }
       });
     }
   } catch (error) {
@@ -400,6 +416,9 @@ specs: JSON.stringify(product.specs),
 
 export async function resetProducts(): Promise<Product[]> {
   try {
+    const prisma = await getPrisma();
+    if (!prisma) return DEFAULT_PRODUCTS;
+
     await prisma.product.deleteMany({});
     const products = DEFAULT_PRODUCTS;
     await saveProducts(products);
@@ -417,6 +436,9 @@ export async function loadConfig(): Promise<SiteConfig> {
   }
 
   try {
+    const prisma = await getPrisma();
+    if (!prisma) return DEFAULT_SITE_CONFIG;
+
     const siteConfig = await prisma.siteConfig.findFirst({
       where: { id: 1 }
     });
