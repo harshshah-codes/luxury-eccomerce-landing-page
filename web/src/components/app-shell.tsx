@@ -105,6 +105,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     <>
       <div className="cursor" id="cursor" ref={cursorRef}></div>
 
+      <div className={`nav__overlay${mobileOpen ? ' open' : ''}`} onClick={() => setMobileOpen(false)} />
       <nav className="nav" id="nav" ref={navRef}>
         <div className="nav__logo" onClick={() => { window.location.href = '/'; setMobileOpen(false); }}>
           <span className="nav__logo-mark"></span>
@@ -134,7 +135,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <li><a className={linkClass('/atelier')} href="/atelier" onClick={() => setMobileOpen(false)}>Atelier</a></li>
         <li><a className={linkClass('/admin')} href="/admin" onClick={() => setMobileOpen(false)}>Concierge</a></li>
       </ul>
-      <div className={`nav__overlay${mobileOpen ? ' open' : ''}`} onClick={() => setMobileOpen(false)} />
 
       <main id="app">{children}</main>
 
