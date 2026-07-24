@@ -111,6 +111,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <span>Maison Héritage</span>
         </div>
         <ul className={`nav__links${mobileOpen ? ' open' : ''}`}>
+          <li className="nav__sheet-header">
+            <span className="nav__sheet-brand">Maison Héritage</span>
+            <button className="nav__sheet-close" onClick={() => setMobileOpen(false)}>×</button>
+          </li>
           <li><a className={linkClass('/')} href="/" onClick={() => setMobileOpen(false)}>Maison</a></li>
           <li><a className={linkClass('/shop')} href="/shop" onClick={() => setMobileOpen(false)}>Collections</a></li>
           <li><a className={linkClass('/atelier')} href="/atelier" onClick={() => setMobileOpen(false)}>Atelier</a></li>
@@ -130,7 +134,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           </button>
         </div>
       </nav>
-      {mobileOpen && <div className="nav__overlay" onClick={() => setMobileOpen(false)} />}
+      <div className={`nav__overlay${mobileOpen ? ' open' : ''}`} onClick={() => setMobileOpen(false)} />
 
       <main id="app">{children}</main>
 
