@@ -43,7 +43,7 @@ export default function CategoriesPage() {
               <a className="category-card reveal" href={`/categories/${cat.name.toLowerCase().replace(/\s/g, '-')}`} key={cat.name}>
                 <div className="category-card__num">N° {String(i + 1).padStart(2, '0')}</div>
                 <div className="category-card__image">
-                  <img className="lazy-img" src={img(cat.imageSeed, 400, 400)} alt={cat.name} />
+                  <img className="lazy-img" src={img(cat.imageUrl)} alt={cat.name} />
                 </div>
                 <div className="category-card__name">{cat.name}</div>
                 <div className="category-card__count">{count} object{count === 1 ? '' : 's'} · View →</div>

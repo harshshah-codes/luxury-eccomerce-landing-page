@@ -1,18 +1,16 @@
 import React from 'react';
 
-export const WHATSAPP_NUMBER = '33142000000';
-
-export function whatsappLink(productName: string, sku: string) {
-  const msg = `Good day, Maison Héritage.\n\nI would like to enquire about the ${productName} (Ref: ${sku}).\n\nCould you kindly share availability and the next steps for acquisition?`;
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+export function whatsappLink(productName: string, sku: string, number: string) {
+  const msg = `hey, can i know more about the ${productName} (${sku})`;
+  return `https://wa.me/${number}?text=${encodeURIComponent(msg)}`;
 }
 
-export function whatsappGeneralLink() {
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Good day, Maison Héritage. I would like to make a general enquiry.')}`;
+export function whatsappGeneralLink(number: string) {
+  return `https://wa.me/${number}?text=${encodeURIComponent('hey, can i know more about your products')}`;
 }
 
-export function img(seed: string, w = 800, h = 1000) {
-  return `https://picsum.photos/seed/${seed}/${w}/${h}`;
+export function img(url: string) {
+  return url;
 }
 
 export function escapeAttr(s: string) {

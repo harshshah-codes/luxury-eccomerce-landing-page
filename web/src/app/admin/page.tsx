@@ -112,14 +112,15 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
   const [hero, setHero] = useState({ ...cfg.hero });
   const [marqueeItems, setMarqueeItems] = useState(cfg.marqueeItems.join('\n'));
   const [manifesto, setManifesto] = useState({ ...cfg.manifesto });
-  const [catsText, setCatsText] = useState(cfg.categories.map(c => `${c.name}|${c.imageSeed}`).join('\n'));
+  const [catsText, setCatsText] = useState(cfg.categories.map(c => `${c.name}|${c.imageUrl}`).join('\n'));
   const [atelier, setAtelier] = useState({
     label: cfg.atelier.label, title: cfg.atelier.title, intro: cfg.atelier.intro,
     stats: cfg.atelier.stats.map(s => `${s.num}|${s.label}`).join('\n'),
-    images: cfg.atelier.images.map(im => `${im.seed}|${im.caption}|${im.wide ? '1' : '0'}`).join('\n')
+    images: cfg.atelier.images.map(im => `${im.url}|${im.caption}|${im.wide ? '1' : '0'}`).join('\n')
   });
   const [principlesText, setPrinciplesText] = useState(cfg.principles.map(p => `${p.num}|${p.name}|${p.desc}|${p.detail}`).join('\n'));
   const [footer, setFooter] = useState({
+    whatsapp: cfg.whatsappNumber || '',
     brand: cfg.footer.brand, tag: cfg.footer.tag,
     columns: cfg.footer.columns.map(col => {
       const links = col.links.map(l => `${l.label}${l.href ? `:${l.href}` : ''}`).join(', ');
@@ -130,12 +131,12 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
   const [shop, setShop] = useState({ title: cfg.shop.title, subtitle: cfg.shop.subtitle });
   const [ap, setAp] = useState({
     heroEyebrow: cfg.atelierPage.heroEyebrow, heroTitle: cfg.atelierPage.heroTitle,
-    heroSub: cfg.atelierPage.heroSub, heroImageSeed: cfg.atelierPage.heroImageSeed,
+    heroSub: cfg.atelierPage.heroSub, heroImageUrl: cfg.atelierPage.heroImageUrl,
     heroMetaNum: cfg.atelierPage.heroMetaNum, heroMetaText: cfg.atelierPage.heroMetaText,
     sectionLabel: cfg.atelierPage.sectionLabel, sectionTitle: cfg.atelierPage.sectionTitle,
     sectionIntro: cfg.atelierPage.sectionIntro,
     stats: cfg.atelierPage.stats.map(s => `${s.num}|${s.label}`).join('\n'),
-    images: cfg.atelierPage.images.map(im => `${im.seed}|${im.caption}|${im.wide ? '1' : '0'}`).join('\n'),
+    images: cfg.atelierPage.images.map(im => `${im.url}|${im.caption}|${im.wide ? '1' : '0'}`).join('\n'),
     principlesTitle: cfg.atelierPage.principlesTitle, principlesIntro: cfg.atelierPage.principlesIntro,
     principles: cfg.atelierPage.principles.map(p => `${p.num}|${p.name}|${p.desc}|${p.detail}`).join('\n')
   });
@@ -230,8 +231,8 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
   };
   const saveCategories = () => {
     const cats = catsText.split('\n').filter(Boolean).map(line => {
-      const [name, imageSeed] = line.split('|').map(s => s.trim());
-      return { name: name || 'Category', imageSeed: imageSeed || 'cat-' + Date.now() };
+      const [name, imageUrl] = line.split('|').map(s => s.trim());
+      return { name: name || 'Category', imageUrl: imageUrl || 'cat-' + Date.now() };
     });
     updateCfg({ ...cfg, categories: cats });
     showToast('Categories saved');
@@ -242,8 +243,8 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
       return { num: num || '', label: label || '' };
     });
     const images = atelier.images.split('\n').filter(Boolean).map(line => {
-      const [seed, caption, wide] = line.split('|').map(s => s.trim());
-      return { seed: seed || '', caption: caption || '', wide: wide === '1' };
+      const [url, caption, wide] = line.split('|').map(s => s.trim());
+      return { url: url || '', caption: caption || '', wide: wide === '1' };
     });
     updateCfg({ ...cfg, atelier: { label: atelier.label, title: atelier.title, intro: atelier.intro, stats, images } });
     showToast('Atelier saved');
@@ -265,7 +266,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
       }) : [];
       return { title: title || '', links };
     });
-    updateCfg({ ...cfg, footer: { brand: footer.brand, tag: footer.tag, columns, copyright: footer.copyright, tagline: footer.tagline } });
+    updateCfg({ ...cfg, whatsappNumber: footer.whatsapp, footer: { brand: footer.brand, tag: footer.tag, columns, copyright: footer.copyright, tagline: footer.tagline } });
     showToast('Footer saved');
   };
   const saveShop = () => {
@@ -278,8 +279,8 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
       return { num: num || '', label: label || '' };
     });
     const images = ap.images.split('\n').filter(Boolean).map(line => {
-      const [seed, caption, wide] = line.split('|').map(s => s.trim());
-      return { seed: seed || '', caption: caption || '', wide: wide === '1' };
+      const [url, caption, wide] = line.split('|').map(s => s.trim());
+      return { url: url || '', caption: caption || '', wide: wide === '1' };
     });
     const principles = ap.principles.split('\n').filter(Boolean).map(line => {
       const [num, name, desc, detail] = line.split('|').map(s => s.trim());
@@ -287,7 +288,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
     });
     updateCfg({ ...cfg, atelierPage: {
       heroEyebrow: ap.heroEyebrow, heroTitle: ap.heroTitle, heroSub: ap.heroSub,
-      heroImageSeed: ap.heroImageSeed, heroMetaNum: ap.heroMetaNum, heroMetaText: ap.heroMetaText,
+      heroImageUrl: ap.heroImageUrl, heroMetaNum: ap.heroMetaNum, heroMetaText: ap.heroMetaText,
       sectionLabel: ap.sectionLabel, sectionTitle: ap.sectionTitle, sectionIntro: ap.sectionIntro,
       stats, images, principlesTitle: ap.principlesTitle, principlesIntro: ap.principlesIntro, principles
     }});
@@ -302,14 +303,15 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
     setHero({ ...fresh.hero });
     setMarqueeItems(fresh.marqueeItems.join('\n'));
     setManifesto({ ...fresh.manifesto });
-    setCatsText(fresh.categories.map(c => `${c.name}|${c.imageSeed}`).join('\n'));
+    setCatsText(fresh.categories.map(c => `${c.name}|${c.imageUrl}`).join('\n'));
     setAtelier({
       label: fresh.atelier.label, title: fresh.atelier.title, intro: fresh.atelier.intro,
       stats: fresh.atelier.stats.map(s => `${s.num}|${s.label}`).join('\n'),
-      images: fresh.atelier.images.map(im => `${im.seed}|${im.caption}|${im.wide ? '1' : '0'}`).join('\n')
+      images: fresh.atelier.images.map(im => `${im.url}|${im.caption}|${im.wide ? '1' : '0'}`).join('\n')
     });
     setPrinciplesText(fresh.principles.map(p => `${p.num}|${p.name}|${p.desc}|${p.detail}`).join('\n'));
     setFooter({
+      whatsapp: fresh.whatsappNumber || '',
       brand: fresh.footer.brand, tag: fresh.footer.tag,
       columns: fresh.footer.columns.map(col => {
         const links = col.links.map(l => `${l.label}${l.href ? `:${l.href}` : ''}`).join(', ');
@@ -320,12 +322,12 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
     setShop({ title: fresh.shop.title, subtitle: fresh.shop.subtitle });
     setAp({
       heroEyebrow: fresh.atelierPage.heroEyebrow, heroTitle: fresh.atelierPage.heroTitle,
-      heroSub: fresh.atelierPage.heroSub, heroImageSeed: fresh.atelierPage.heroImageSeed,
+      heroSub: fresh.atelierPage.heroSub, heroImageUrl: fresh.atelierPage.heroImageUrl,
       heroMetaNum: fresh.atelierPage.heroMetaNum, heroMetaText: fresh.atelierPage.heroMetaText,
       sectionLabel: fresh.atelierPage.sectionLabel, sectionTitle: fresh.atelierPage.sectionTitle,
       sectionIntro: fresh.atelierPage.sectionIntro,
       stats: fresh.atelierPage.stats.map(s => `${s.num}|${s.label}`).join('\n'),
-      images: fresh.atelierPage.images.map(im => `${im.seed}|${im.caption}|${im.wide ? '1' : '0'}`).join('\n'),
+      images: fresh.atelierPage.images.map(im => `${im.url}|${im.caption}|${im.wide ? '1' : '0'}`).join('\n'),
       principlesTitle: fresh.atelierPage.principlesTitle, principlesIntro: fresh.atelierPage.principlesIntro,
       principles: fresh.atelierPage.principles.map(p => `${p.num}|${p.name}|${p.desc}|${p.detail}`).join('\n')
     });
@@ -352,7 +354,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
             <ConfigField id="f-tag" label="Tag" value={pf.tag} onChange={v => setPf(p => ({ ...p, tag: v }))} />
             <ConfigField id="f-description" label="Description" value={pf.description} onChange={v => setPf(p => ({ ...p, description: v }))} type="textarea" />
             <ConfigField id="f-specs" label="Specifications (Label: Value per line)" value={pf.specs} onChange={v => setPf(p => ({ ...p, specs: v }))} type="textarea" />
-            <ConfigField id="f-images" label="Image seeds (comma separated)" value={pf.images} onChange={v => setPf(p => ({ ...p, images: v }))} />
+            <ConfigField id="f-images" label="Image URLs (comma separated)" value={pf.images} onChange={v => setPf(p => ({ ...p, images: v }))} />
             <ConfigField id="f-story" label="Story" value={pf.story} onChange={v => setPf(p => ({ ...p, story: v }))} type="textarea" />
             <div className="admin__actions">
               <button className="admin__btn" onClick={handleProductSave}>{editingId ? 'Save changes' : 'Add object'}</button>
@@ -367,7 +369,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
             <ConfigField id="cfg-hero-eyebrow" label="Eyebrow" value={hero.eyebrow} onChange={v => setHero(h => ({ ...h, eyebrow: v }))} />
             <ConfigField id="cfg-hero-title" label="Title" value={hero.title} onChange={v => setHero(h => ({ ...h, title: v }))} type="textarea" />
             <ConfigField id="cfg-hero-subtitle" label="Subtitle" value={hero.subtitle} onChange={v => setHero(h => ({ ...h, subtitle: v }))} type="textarea" />
-            <ConfigField id="cfg-hero-image" label="Image seed" value={hero.imageSeed} onChange={v => setHero(h => ({ ...h, imageSeed: v }))} />
+            <ConfigField id="cfg-hero-image" label="Image URL" value={hero.imageUrl} onChange={v => setHero(h => ({ ...h, imageUrl: v }))} />
             <ConfigField id="cfg-hero-meta-num" label="Meta number" value={hero.metaNum} onChange={v => setHero(h => ({ ...h, metaNum: v }))} />
             <ConfigField id="cfg-hero-meta-text" label="Meta text" value={hero.metaText} onChange={v => setHero(h => ({ ...h, metaText: v }))} />
             <div className="admin__actions"><button className="admin__btn" onClick={saveHero}>Save Hero</button></div>
@@ -400,7 +402,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
           <div>
             <div className="admin__sidebar-title">Categories</div>
             <div className="admin__field">
-              <label className="admin__field-label">Categories (one per line: Name|imageSeed)</label>
+              <label className="admin__field-label">Categories (one per line: Name|imageUrl)</label>
               <textarea value={catsText} onChange={e => setCatsText(e.target.value)} placeholder="Timepieces|cat-timepieces" />
             </div>
             <div className="admin__actions"><button className="admin__btn" onClick={saveCategories}>Save Categories</button></div>
@@ -418,7 +420,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
               <textarea value={atelier.stats} onChange={e => setAtelier(a => ({ ...a, stats: e.target.value }))} placeholder="1923|Year founded" />
             </div>
             <div className="admin__field">
-              <label className="admin__field-label">Images (one per line: seed|caption|wide(1/0))</label>
+              <label className="admin__field-label">Images (one per line: url|caption|wide(1/0))</label>
               <textarea value={atelier.images} onChange={e => setAtelier(a => ({ ...a, images: e.target.value }))} placeholder="atelier-bench|— caption|1" />
             </div>
             <div className="admin__actions"><button className="admin__btn" onClick={saveAtelier}>Save Atelier</button></div>
@@ -447,6 +449,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
             </div>
             <ConfigField id="cfg-footer-copyright" label="Copyright" value={footer.copyright} onChange={v => setFooter(f => ({ ...f, copyright: v }))} />
             <ConfigField id="cfg-footer-tagline" label="Tagline" value={footer.tagline} onChange={v => setFooter(f => ({ ...f, tagline: v }))} />
+            <ConfigField id="cfg-footer-whatsapp" label="WhatsApp number" value={footer.whatsapp} onChange={v => setFooter(f => ({ ...f, whatsapp: v }))} />
             <div className="admin__actions"><button className="admin__btn" onClick={saveFooter}>Save Footer</button></div>
           </div>
         );
@@ -467,7 +470,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
             <ConfigField id="cfg-ap-hero-eyebrow" label="Hero Eyebrow" value={ap.heroEyebrow} onChange={v => setAp(a => ({ ...a, heroEyebrow: v }))} />
             <ConfigField id="cfg-ap-hero-title" label="Hero Title" value={ap.heroTitle} onChange={v => setAp(a => ({ ...a, heroTitle: v }))} type="textarea" />
             <ConfigField id="cfg-ap-hero-sub" label="Hero Subtitle" value={ap.heroSub} onChange={v => setAp(a => ({ ...a, heroSub: v }))} type="textarea" />
-            <ConfigField id="cfg-ap-hero-image" label="Hero Image seed" value={ap.heroImageSeed} onChange={v => setAp(a => ({ ...a, heroImageSeed: v }))} />
+            <ConfigField id="cfg-ap-hero-image" label="Hero Image URL" value={ap.heroImageUrl} onChange={v => setAp(a => ({ ...a, heroImageUrl: v }))} />
             <ConfigField id="cfg-ap-hero-meta-num" label="Hero Meta number" value={ap.heroMetaNum} onChange={v => setAp(a => ({ ...a, heroMetaNum: v }))} />
             <ConfigField id="cfg-ap-hero-meta-text" label="Hero Meta text" value={ap.heroMetaText} onChange={v => setAp(a => ({ ...a, heroMetaText: v }))} />
             <h3 style={{ font: 'var(--serif)', fontSize: '1rem', margin: '1rem 0 0.5rem', opacity: 0.6 }}>Section</h3>
@@ -481,7 +484,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
             </div>
             <h3 style={{ font: 'var(--serif)', fontSize: '1rem', margin: '1rem 0 0.5rem', opacity: 0.6 }}>Images</h3>
             <div className="admin__field">
-              <label className="admin__field-label">Images (one per line: seed|caption|wide(1/0))</label>
+              <label className="admin__field-label">Images (one per line: url|caption|wide(1/0))</label>
               <textarea value={ap.images} onChange={e => setAp(a => ({ ...a, images: e.target.value }))} placeholder="atelier-watch|— caption|1" />
             </div>
             <h3 style={{ font: 'var(--serif)', fontSize: '1rem', margin: '1rem 0 0.5rem', opacity: 0.6 }}>Principles</h3>
@@ -509,7 +512,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
             {products.map(p => (
               <div className="admin__product" key={p.id}>
                 <div className="admin__product-image">
-                  <img src={img(p.images[0], 160, 160)} alt={p.name} />
+                  <img src={img(p.images[0])} alt={p.name} />
                 </div>
                 <div className="admin__product-info">
                   <div className="admin__product-name">{p.name}</div>

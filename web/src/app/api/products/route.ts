@@ -14,7 +14,7 @@ export async function GET() {
       name: p.name,
       nameEm: p.nameEm || undefined,
       category: p.category.name,
-      price: `€ ${new Intl.NumberFormat('de-DE').format(Number(p.price))}`,
+      price: `₹ ${new Intl.NumberFormat('en-IN').format(Number(p.price))}`,
       sku: p.sku,
       year: p.year.toString(),
       tag: p.tag,

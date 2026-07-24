@@ -24,7 +24,7 @@ export interface ConfigStat {
 }
 
 export interface ConfigImage {
-  seed: string;
+  url: string;
   caption: string;
   wide: boolean;
 }
@@ -46,7 +46,7 @@ export interface SiteConfig {
     eyebrow: string;
     title: string;
     subtitle: string;
-    imageSeed: string;
+    imageUrl: string;
     metaNum: string;
     metaText: string;
   };
@@ -57,7 +57,7 @@ export interface SiteConfig {
     attribution: string;
     role: string;
   };
-  categories: { name: string; imageSeed: string }[];
+  categories: { name: string; imageUrl: string }[];
   featured: {
     title: string;
   };
@@ -76,6 +76,7 @@ export interface SiteConfig {
     copyright: string;
     tagline: string;
   };
+  whatsappNumber: string;
   shop: {
     title: string;
     subtitle: string;
@@ -84,7 +85,7 @@ export interface SiteConfig {
     heroEyebrow: string;
     heroTitle: string;
     heroSub: string;
-    heroImageSeed: string;
+    heroImageUrl: string;
     heroMetaNum: string;
     heroMetaText: string;
     sectionLabel: string;
