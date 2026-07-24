@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "migrate:new": "pnpm dlx prisma migrate dev",
-    "client:generate": "pnpm dlx prisma generate"
+    "client:generate": "pnpm dlx prisma generate",
+    "db:seed": "pnpm dlx tsx prisma/seed.ts",
+    "db:reset": "pnpm dlx prisma migrate reset --force && pnpm db:seed"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
