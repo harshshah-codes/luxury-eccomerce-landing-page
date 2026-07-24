@@ -54,7 +54,7 @@ export default function CategoryProductsPage() {
             <a className="product-card reveal" href={`/products/${p.id}`} key={p.id}>
               <div className="product-card__image">
                 <span className="product-card__tag">{p.tag}</span>
-                <img className="lazy-img" src={img(p.images[0], 700, 875)} alt={p.name} />
+                <img className="lazy-img" src={img(p.images[0])} alt={p.name} />
               </div>
               <div className="product-card__category">{p.category}</div>
               <div className="product-card__name">{p.name}</div>

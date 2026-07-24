@@ -55,7 +55,7 @@ export default function HomePage() {
           </div>
         </div>
         <div className="hero__right" id="hero-right">
-          <div className="hero__image" style={{ backgroundImage: `url('${img(h.imageSeed, 1100, 1400)}')` }}></div>
+          <div className="hero__image" style={{ backgroundImage: `url('${img(h.imageUrl)}')` }}></div>
           <div className="hero__meta">
             <div className="hero__meta-num">{h.metaNum}</div>
             <div className="hero__meta-text"><RichText text={h.metaText} /></div>
@@ -98,7 +98,7 @@ export default function HomePage() {
               <Link className="category-card reveal" href={`/categories/${cat.name.toLowerCase().replace(/\s/g, '-')}`} key={cat.name}>
                 <div className="category-card__num">N° {String(i + 1).padStart(2, '0')}</div>
                 <div className="category-card__image">
-                  <img className="lazy-img" src={img(cat.imageSeed, 400, 400)} alt={cat.name} />
+                  <img className="lazy-img" src={img(cat.imageUrl)} alt={cat.name} />
                 </div>
                 <div className="category-card__name">{cat.name}</div>
                 <div className="category-card__count">{count} object{count === 1 ? '' : 's'} · View →</div>
@@ -118,7 +118,7 @@ export default function HomePage() {
             <Link className="product-card reveal" href={`/products/${p.id}`} key={p.id}>
               <div className="product-card__image">
                 <span className="product-card__tag">{p.tag}</span>
-                <img className="lazy-img" src={img(p.images[0], 700, 875)} alt={p.name} />
+                <img className="lazy-img" src={img(p.images[0])} alt={p.name} />
               </div>
               <div className="product-card__category">{p.category}</div>
               <div className="product-card__name">{p.name}</div>
@@ -153,7 +153,7 @@ export default function HomePage() {
             {a.images.map((im, i) => (
               <div key={i}>
                 <div className={`atelier__image${im.wide ? ' atelier__image--wide' : ''}`}>
-                  <img className="lazy-img" src={img(im.seed, im.wide ? 800 : 700, im.wide ? 550 : 875)} alt={im.caption} />
+                  <img className="lazy-img" src={img(im.url)} alt={im.caption} />
                 </div>
                 <div className="atelier__caption">{im.caption}</div>
               </div>

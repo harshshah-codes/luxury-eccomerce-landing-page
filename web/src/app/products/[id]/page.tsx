@@ -24,7 +24,7 @@ export default function ProductDetailPage() {
       setAllProducts(products);
       const p = products.find(x => x.id === id);
       setProduct(p);
-      if (p) setMainImage(img(p.images[0], 900, 1125));
+      if (p) setMainImage(img(p.images[0]));
     };
     loadData();
   }, [id]);
@@ -73,17 +73,17 @@ export default function ProductDetailPage() {
         <div className="product-detail__inner">
           <div className="product-detail__gallery">
             <div className="product-detail__main-image" id="main-image">
-              <img id="main-img-el" src={mainImage || img(product.images[0], 900, 1125)} alt={product.name} />
+              <img id="main-img-el" src={mainImage || img(product.images[0])} alt={product.name} />
             </div>
             <div className="product-detail__thumbs">
-              {product.images.map((imgSeed, i) => (
+              {product.images.map((imgUrl, i) => (
                 <div
                   className={`product-detail__thumb ${i === 0 ? 'active' : ''}`}
-                  data-img={img(imgSeed, 900, 1125)}
+                  data-img={img(imgUrl)}
                   onClick={(e) => swapMainImage(e.currentTarget)}
                   key={i}
                 >
-                  <img src={img(imgSeed, 200, 200)} alt={`${product.name} view ${i + 1}`} />
+                  <img src={img(imgUrl)} alt={`${product.name} view ${i + 1}`} />
                 </div>
               ))}
             </div>
@@ -150,7 +150,7 @@ export default function ProductDetailPage() {
             </div>
           </div>
           <div className="story-strip__image reveal">
-            <img className="lazy-img" src={img(product.images[1] || product.images[0], 800, 640)} alt={`${product.name} story`} />
+            <img className="lazy-img" src={img(product.images[1] || product.images[0])} alt={`${product.name} story`} />
           </div>
         </div>
       </section>
@@ -165,7 +165,7 @@ export default function ProductDetailPage() {
             <Link className="product-card reveal" href={`/products/${p.id}`} key={p.id}>
               <div className="product-card__image">
                 <span className="product-card__tag">{p.tag}</span>
-                <img className="lazy-img" src={img(p.images[0], 700, 875)} alt={p.name} />
+                <img className="lazy-img" src={img(p.images[0])} alt={p.name} />
               </div>
               <div className="product-card__category">{p.category}</div>
               <div className="product-card__name">{p.name}</div>

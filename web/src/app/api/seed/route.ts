@@ -8,7 +8,7 @@ const DEFAULT_SITE_CONFIG = {
     eyebrow: 'Maison Héritage',
     title: 'Objects considered\nfor a life unlived.',
     subtitle: 'Timepieces, footwear, leather goods, garments and objets — produced in limited number, by hand, intended for life.',
-    imageSeed: 'luxury-watch-hero',
+    imageUrl: 'https://picsum.photos/seed/luxury-watch-hero/1100/1400',
     metaNum: 'N° 001',
     metaText: 'Bench-marked\nsince 1923'
   },
@@ -29,14 +29,14 @@ const DEFAULT_SITE_CONFIG = {
     role: 'Founded Paris, 1923'
   },
   categories: [
-    { name: 'Timepieces', imageSeed: 'cat-timepieces' },
-    { name: 'Footwear', imageSeed: 'cat-footwear' },
-    { name: 'Leather Goods', imageSeed: 'cat-leather' },
-    { name: 'Parfum', imageSeed: 'cat-parfum' },
-    { name: 'Garments', imageSeed: 'cat-garments' },
-    { name: 'Accessories', imageSeed: 'cat-accessories' },
-    { name: 'Jewellery', imageSeed: 'cat-jewellery' },
-    { name: 'Objets', imageSeed: 'cat-objets' }
+    { name: 'Timepieces', imageUrl: 'https://picsum.photos/seed/cat-timepieces/400/400' },
+    { name: 'Footwear', imageUrl: 'https://picsum.photos/seed/cat-footwear/400/400' },
+    { name: 'Leather Goods', imageUrl: 'https://picsum.photos/seed/cat-leather/400/400' },
+    { name: 'Parfum', imageUrl: 'https://picsum.photos/seed/cat-parfum/400/400' },
+    { name: 'Garments', imageUrl: 'https://picsum.photos/seed/cat-garments/400/400' },
+    { name: 'Accessories', imageUrl: 'https://picsum.photos/seed/cat-accessories/400/400' },
+    { name: 'Jewellery', imageUrl: 'https://picsum.photos/seed/cat-jewellery/400/400' },
+    { name: 'Objets', imageUrl: 'https://picsum.photos/seed/cat-objets/400/400' }
   ],
   featured: { title: 'From the register.' },
   atelier: {
@@ -50,9 +50,9 @@ const DEFAULT_SITE_CONFIG = {
       { num: '8', label: 'Object categories' }
     ],
     images: [
-      { seed: 'atelier-main', caption: 'The main bench, rue du Faubourg Saint-Honoré', wide: true },
-      { seed: 'atelier-detail', caption: 'Hand-engraving the Lumière dial', wide: false },
-      { seed: 'atelier-tools', caption: 'Original tools, in continuous use since 1923', wide: false }
+      { url: 'https://picsum.photos/seed/atelier-main/800/550', caption: 'The main bench, rue du Faubourg Saint-Honoré', wide: true },
+      { url: 'https://picsum.photos/seed/atelier-detail/700/875', caption: 'Hand-engraving the Lumière dial', wide: false },
+      { url: 'https://picsum.photos/seed/atelier-tools/700/875', caption: 'Original tools, in continuous use since 1923', wide: false }
     ]
   },
   principles: [
@@ -106,7 +106,7 @@ const DEFAULT_SITE_CONFIG = {
     heroEyebrow: 'The Atelier',
     heroTitle: 'Where every object\nbegins — and ends.',
     heroSub: 'Our Paris bench has been in continuous use since 1923. Eight disciplines share a single atelier, each under the direction of a master craftsperson.',
-    heroImageSeed: 'atelier-hero-bench',
+    heroImageUrl: 'https://picsum.photos/seed/atelier-hero-bench/1100/1400',
     heroMetaNum: 'N° 001',
     heroMetaText: 'Rue du Faubourg\nSaint-Honoré, Paris',
     sectionLabel: 'The Workshop',
@@ -119,9 +119,9 @@ const DEFAULT_SITE_CONFIG = {
       { num: '8', label: 'Disciplines' }
     ],
     images: [
-      { seed: 'atelier-panoramic', caption: 'The main atelier, panoramic view', wide: true },
-      { seed: 'atelier-watchmaker', caption: 'The watchmaker\'s bench', wide: false },
-      { seed: 'atelier-leather', caption: 'Leather workshop, hand-stitching', wide: false }
+      { url: 'https://picsum.photos/seed/atelier-panoramic/800/550', caption: 'The main atelier, panoramic view', wide: true },
+      { url: 'https://picsum.photos/seed/atelier-watchmaker/700/875', caption: 'The watchmaker\'s bench', wide: false },
+      { url: 'https://picsum.photos/seed/atelier-leather/700/875', caption: 'Leather workshop, hand-stitching', wide: false }
     ],
     principlesTitle: 'Six principles,\nunchanged since 1923.',
     principlesIntro: 'Written by the founder in the first winter of the maison. Read at the start of each apprentice\'s tenure.',
@@ -137,14 +137,14 @@ const DEFAULT_SITE_CONFIG = {
 };
 
 const DEFAULT_PRODUCTS = [
-  { externalId: 'p1', name: 'Lumière Tourbillon', nameEm: 'Lumière Tourbillon', category: 'Timepieces', price: '5335000.00', sku: 'MH-TB-001', year: 2024, tag: 'Limited · 50', description: 'A flying tourbillon cased in 18k rose gold, hand-finished by a single master watchmaker over 240 hours. The skeletonised dial reveals the in-house calibre MH-01, beating at 21,600 vibrations per hour with a 72-hour reserve. Each movement is assembled, regulated and sealed at our Paris bench.', specs: [{ label: 'Movement', value: 'Calibre MH-01, manual winding' }, { label: 'Case', value: '18k rose gold, 40mm, sapphire crystal' }, { label: 'Dial', value: 'Hand-engraved silver, skeletonised' }, { label: 'Strap', value: 'Hand-stitched alligator, gold pin buckle' }, { label: 'Reserve', value: '72 hours' }, { label: 'Edition', value: 'Limited to 50 numbered pieces' }], images: ['watch-tourbillon-front', 'watch-tourbillon-detail', 'watch-tourbillon-side', 'watch-tourbillon-case'], story: 'The Lumière was conceived in 2019 as a study in transparency.' },
-  { externalId: 'p2', name: 'Sovereign Oxford', nameEm: 'Sovereign Oxford', category: 'Footwear', price: '264000.00', sku: 'MH-FT-014', year: 2024, tag: 'Made to Order', description: 'A whole-cut Oxford in deep burgundy calf, lasted on the Sovereign wooden form first carved in 1947.', specs: [{ label: 'Pattern', value: 'Whole-cut Oxford, closed lacing' }, { label: 'Leather', value: 'Hand-selected calf, burgundy patina' }], images: ['shoes-oxford-side', 'shoes-oxford-detail', 'shoes-oxford-front', 'shoes-oxford-sole'], story: 'The Sovereign last was carved by Eugène Berluti in 1947.' },
-  { externalId: 'p3', name: 'Ministre Briefcase', nameEm: 'Ministre Briefcase', category: 'Leather Goods', price: '638000.00', sku: 'MH-LG-008', year: 2024, tag: 'Signature', description: 'A ministerial briefcase in saddle-stitched Taurillon Clymène.', specs: [{ label: 'Leather', value: 'Taurillon Clymène, vegetable-tanned' }], images: ['bag-briefcase-front', 'bag-briefcase-open', 'bag-briefcase-detail', 'bag-briefcase-strap'], story: 'The Ministre was first commissioned in 1962.' },
-  { externalId: 'p4', name: 'Nuit Étoilée', nameEm: 'Nuit Étoilée', category: 'Parfum', price: '41800.00', sku: 'MH-PF-003', year: 2024, tag: 'Extrait · 100ml', description: 'An extrait de parfum composed by Camille Roche.', specs: [{ label: 'Concentration', value: 'Extrait, 28%' }], images: ['perfume-bottle', 'perfume-detail', 'perfume-box', 'perfume-crystal'], story: 'Camille Roche composed Nuit Étoilée over 14 months.' },
-  { externalId: 'p5', name: 'Ambassadeur Overcoat', nameEm: 'Ambassadeur Overcoat', category: 'Garments', price: '1012000.00', sku: 'MH-GM-021', year: 2024, tag: 'Bespoke', description: 'A double-breasted overcoat in Loro Piana cashmere/vicuña.', specs: [{ label: 'Cloth', value: 'Loro Piana cashmere/vicuña, 680g' }], images: ['coat-front', 'coat-detail', 'coat-back', 'coat-fabric'], story: 'The Ambassadeur was first cut for a Portuguese ambassador in 1958.' },
-  { externalId: 'p6', name: 'Constellation Foulard', nameEm: 'Constellation Foulard', category: 'Accessories', price: '74800.00', sku: 'MH-AC-032', year: 2024, tag: 'Edition · 200', description: 'A 90cm twill foulard printed with the celestial chart of Paris.', specs: [{ label: 'Material', value: 'Silk twill, 16 momme' }], images: ['scarf-pattern', 'scarf-fold', 'scarf-detail', 'scarf-box'], story: 'The chart was sourced from the Paris Observatory archive.' },
-  { externalId: 'p7', name: 'Souverain Cufflinks', nameEm: 'Souverain Cufflinks', category: 'Jewellery', price: '462000.00', sku: 'MH-JW-007', year: 2024, tag: 'Numbered', description: 'Cufflinks in 18k white gold set with black diamonds.', specs: [{ label: 'Metal', value: '18k white gold, rhodium-finished' }], images: ['cufflinks-pair', 'cufflinks-detail', 'cufflinks-box', 'cufflinks-side'], story: 'The Souverain mechanism was developed in 1981.' },
-  { externalId: 'p8', name: "Plume d'Or", nameEm: "Plume d'Or", category: 'Objets', price: '203500.00', sku: 'MH-OB-011', year: 2024, tag: 'Cartridge · 18k', description: 'A fountain pen in lacquered brass with 18k gold nib.', specs: [{ label: 'Nib', value: '18k solid gold, hand-ground' }], images: ['pen-fountain', 'pen-nib', 'pen-cap', 'pen-case'], story: "The Plume d'Or has been produced since 1936." }
+  { externalId: 'p1', name: 'Lumière Tourbillon', nameEm: 'Lumière Tourbillon', category: 'Timepieces', price: '5335000.00', sku: 'MH-TB-001', year: 2024, tag: 'Limited · 50', description: 'A flying tourbillon cased in 18k rose gold, hand-finished by a single master watchmaker over 240 hours. The skeletonised dial reveals the in-house calibre MH-01, beating at 21,600 vibrations per hour with a 72-hour reserve. Each movement is assembled, regulated and sealed at our Paris bench.', specs: [{ label: 'Movement', value: 'Calibre MH-01, manual winding' }, { label: 'Case', value: '18k rose gold, 40mm, sapphire crystal' }, { label: 'Dial', value: 'Hand-engraved silver, skeletonised' }, { label: 'Strap', value: 'Hand-stitched alligator, gold pin buckle' }, { label: 'Reserve', value: '72 hours' }, { label: 'Edition', value: 'Limited to 50 numbered pieces' }], images: ['https://picsum.photos/seed/watch-tourbillon-front/900/1125', 'https://picsum.photos/seed/watch-tourbillon-detail/900/1125', 'https://picsum.photos/seed/watch-tourbillon-side/900/1125', 'https://picsum.photos/seed/watch-tourbillon-case/900/1125'], story: 'The Lumière was conceived in 2019 as a study in transparency.' },
+  { externalId: 'p2', name: 'Sovereign Oxford', nameEm: 'Sovereign Oxford', category: 'Footwear', price: '264000.00', sku: 'MH-FT-014', year: 2024, tag: 'Made to Order', description: 'A whole-cut Oxford in deep burgundy calf, lasted on the Sovereign wooden form first carved in 1947.', specs: [{ label: 'Pattern', value: 'Whole-cut Oxford, closed lacing' }, { label: 'Leather', value: 'Hand-selected calf, burgundy patina' }], images: ['https://picsum.photos/seed/shoes-oxford-side/900/1125', 'https://picsum.photos/seed/shoes-oxford-detail/900/1125', 'https://picsum.photos/seed/shoes-oxford-front/900/1125', 'https://picsum.photos/seed/shoes-oxford-sole/900/1125'], story: 'The Sovereign last was carved by Eugène Berluti in 1947.' },
+  { externalId: 'p3', name: 'Ministre Briefcase', nameEm: 'Ministre Briefcase', category: 'Leather Goods', price: '638000.00', sku: 'MH-LG-008', year: 2024, tag: 'Signature', description: 'A ministerial briefcase in saddle-stitched Taurillon Clymène.', specs: [{ label: 'Leather', value: 'Taurillon Clymène, vegetable-tanned' }], images: ['https://picsum.photos/seed/bag-briefcase-front/900/1125', 'https://picsum.photos/seed/bag-briefcase-open/900/1125', 'https://picsum.photos/seed/bag-briefcase-detail/900/1125', 'https://picsum.photos/seed/bag-briefcase-strap/900/1125'], story: 'The Ministre was first commissioned in 1962.' },
+  { externalId: 'p4', name: 'Nuit Étoilée', nameEm: 'Nuit Étoilée', category: 'Parfum', price: '41800.00', sku: 'MH-PF-003', year: 2024, tag: 'Extrait · 100ml', description: 'An extrait de parfum composed by Camille Roche.', specs: [{ label: 'Concentration', value: 'Extrait, 28%' }], images: ['https://picsum.photos/seed/perfume-bottle/900/1125', 'https://picsum.photos/seed/perfume-detail/900/1125', 'https://picsum.photos/seed/perfume-box/900/1125', 'https://picsum.photos/seed/perfume-crystal/900/1125'], story: 'Camille Roche composed Nuit Étoilée over 14 months.' },
+  { externalId: 'p5', name: 'Ambassadeur Overcoat', nameEm: 'Ambassadeur Overcoat', category: 'Garments', price: '1012000.00', sku: 'MH-GM-021', year: 2024, tag: 'Bespoke', description: 'A double-breasted overcoat in Loro Piana cashmere/vicuña.', specs: [{ label: 'Cloth', value: 'Loro Piana cashmere/vicuña, 680g' }], images: ['https://picsum.photos/seed/coat-front/900/1125', 'https://picsum.photos/seed/coat-detail/900/1125', 'https://picsum.photos/seed/coat-back/900/1125', 'https://picsum.photos/seed/coat-fabric/900/1125'], story: 'The Ambassadeur was first cut for a Portuguese ambassador in 1958.' },
+  { externalId: 'p6', name: 'Constellation Foulard', nameEm: 'Constellation Foulard', category: 'Accessories', price: '74800.00', sku: 'MH-AC-032', year: 2024, tag: 'Edition · 200', description: 'A 90cm twill foulard printed with the celestial chart of Paris.', specs: [{ label: 'Material', value: 'Silk twill, 16 momme' }], images: ['https://picsum.photos/seed/scarf-pattern/900/1125', 'https://picsum.photos/seed/scarf-fold/900/1125', 'https://picsum.photos/seed/scarf-detail/900/1125', 'https://picsum.photos/seed/scarf-box/900/1125'], story: 'The chart was sourced from the Paris Observatory archive.' },
+  { externalId: 'p7', name: 'Souverain Cufflinks', nameEm: 'Souverain Cufflinks', category: 'Jewellery', price: '462000.00', sku: 'MH-JW-007', year: 2024, tag: 'Numbered', description: 'Cufflinks in 18k white gold set with black diamonds.', specs: [{ label: 'Metal', value: '18k white gold, rhodium-finished' }], images: ['https://picsum.photos/seed/cufflinks-pair/900/1125', 'https://picsum.photos/seed/cufflinks-detail/900/1125', 'https://picsum.photos/seed/cufflinks-box/900/1125', 'https://picsum.photos/seed/cufflinks-side/900/1125'], story: 'The Souverain mechanism was developed in 1981.' },
+  { externalId: 'p8', name: "Plume d'Or", nameEm: "Plume d'Or", category: 'Objets', price: '203500.00', sku: 'MH-OB-011', year: 2024, tag: 'Cartridge · 18k', description: 'A fountain pen in lacquered brass with 18k gold nib.', specs: [{ label: 'Nib', value: '18k solid gold, hand-ground' }], images: ['https://picsum.photos/seed/pen-fountain/900/1125', 'https://picsum.photos/seed/pen-nib/900/1125', 'https://picsum.photos/seed/pen-cap/900/1125', 'https://picsum.photos/seed/pen-case/900/1125'], story: "The Plume d'Or has been produced since 1936." }
 ];
 
 export async function POST(request: NextRequest) {

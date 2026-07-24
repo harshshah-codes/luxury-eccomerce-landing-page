@@ -11,8 +11,8 @@ export function whatsappGeneralLink() {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Good day, Maison Héritage. I would like to make a general enquiry.')}`;
 }
 
-export function img(seed: string, w = 800, h = 1000) {
-  return `https://picsum.photos/seed/${seed}/${w}/${h}`;
+export function img(url: string) {
+  return url;
 }
 
 export function escapeAttr(s: string) {
