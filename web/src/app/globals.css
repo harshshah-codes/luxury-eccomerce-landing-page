@@ -99,8 +99,10 @@ section { padding: 8rem 2rem; position: relative; }
   transform: translate(-50%, -50%);
 }
 .nav__links {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
   display: flex; gap: 2.5rem;
-  list-style: none; justify-self: center;
+  list-style: none; z-index: 101;
 }
 .nav__links a {
   font-size: 12px; letter-spacing: 0.12em;
@@ -160,7 +162,7 @@ section { padding: 8rem 2rem; position: relative; }
 }
 @media (max-width: 900px) {
   .nav__links {
-    position: fixed; top: 0; right: 0; width: 300px; max-width: 85vw;
+    position: fixed; top: 0; left: auto; right: 0; width: 300px; max-width: 85vw;
     height: 100vh; flex-direction: column; gap: 0;
     background: #fff; padding: 0;
     border-left: 1px solid var(--line);
