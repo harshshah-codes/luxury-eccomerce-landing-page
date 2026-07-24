@@ -120,7 +120,7 @@ section { padding: 8rem 2rem; position: relative; }
 .nav__sheet-header { display: none; }
 .nav__right {
   display: flex; align-items: center; gap: 1.5rem;
-  justify-self: end;
+  justify-self: end; grid-column: 3;
   font-size: 11px; letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -180,6 +180,7 @@ section { padding: 8rem 2rem; position: relative; }
   .nav__right span.label-text { display: none; }
   .nav__whatsapp { border: none; }
   .nav__hamburger { display: block; }
+  .nav__right { grid-column: auto; }
   .nav__sheet-header {
     display: flex !important; align-items: center; justify-content: space-between;
     padding: 1.5rem 1.5rem 0.5rem;
