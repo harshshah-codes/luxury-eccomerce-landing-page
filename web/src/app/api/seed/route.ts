@@ -98,6 +98,7 @@ const DEFAULT_SITE_CONFIG = {
     copyright: '© 1923—2024 Maison Héritage SA · Paris · Geneva · Tokyo',
     tagline: 'Crafted with restraint'
   },
+  whatsappNumber: '33142000000',
   shop: {
     title: 'The register.',
     subtitle: 'Every object leaves the maison numbered, registered and accompanied by its maker\'s name.'

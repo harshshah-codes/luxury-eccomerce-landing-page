@@ -76,6 +76,7 @@ export interface SiteConfig {
     copyright: string;
     tagline: string;
   };
+  whatsappNumber: string;
   shop: {
     title: string;
     subtitle: string;

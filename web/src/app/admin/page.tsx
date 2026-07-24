@@ -120,6 +120,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
   });
   const [principlesText, setPrinciplesText] = useState(cfg.principles.map(p => `${p.num}|${p.name}|${p.desc}|${p.detail}`).join('\n'));
   const [footer, setFooter] = useState({
+    whatsapp: cfg.whatsappNumber || '',
     brand: cfg.footer.brand, tag: cfg.footer.tag,
     columns: cfg.footer.columns.map(col => {
       const links = col.links.map(l => `${l.label}${l.href ? `:${l.href}` : ''}`).join(', ');
@@ -265,7 +266,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
       }) : [];
       return { title: title || '', links };
     });
-    updateCfg({ ...cfg, footer: { brand: footer.brand, tag: footer.tag, columns, copyright: footer.copyright, tagline: footer.tagline } });
+    updateCfg({ ...cfg, whatsappNumber: footer.whatsapp, footer: { brand: footer.brand, tag: footer.tag, columns, copyright: footer.copyright, tagline: footer.tagline } });
     showToast('Footer saved');
   };
   const saveShop = () => {
@@ -310,6 +311,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
     });
     setPrinciplesText(fresh.principles.map(p => `${p.num}|${p.name}|${p.desc}|${p.detail}`).join('\n'));
     setFooter({
+      whatsapp: fresh.whatsappNumber || '',
       brand: fresh.footer.brand, tag: fresh.footer.tag,
       columns: fresh.footer.columns.map(col => {
         const links = col.links.map(l => `${l.label}${l.href ? `:${l.href}` : ''}`).join(', ');
@@ -447,6 +449,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
             </div>
             <ConfigField id="cfg-footer-copyright" label="Copyright" value={footer.copyright} onChange={v => setFooter(f => ({ ...f, copyright: v }))} />
             <ConfigField id="cfg-footer-tagline" label="Tagline" value={footer.tagline} onChange={v => setFooter(f => ({ ...f, tagline: v }))} />
+            <ConfigField id="cfg-footer-whatsapp" label="WhatsApp number" value={footer.whatsapp} onChange={v => setFooter(f => ({ ...f, whatsapp: v }))} />
             <div className="admin__actions"><button className="admin__btn" onClick={saveFooter}>Save Footer</button></div>
           </div>
         );
