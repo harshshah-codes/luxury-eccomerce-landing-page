@@ -122,7 +122,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             <span className="label-text">{whatsappNumber}</span>
           </a>
           <button className={`nav__hamburger${mobileOpen ? ' open' : ''}`} onClick={() => setMobileOpen(!mobileOpen)} aria-label="Menu">
-            <span></span><span></span><span></span>
+            <svg viewBox="0 0 24 24" fill="none">
+              <line x1="3" y1="7" x2="21" y2="7" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="17" x2="21" y2="17" />
+            </svg>
           </button>
         </div>
       </nav>
