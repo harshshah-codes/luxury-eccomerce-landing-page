@@ -450,6 +450,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
             <ConfigField id="cfg-footer-copyright" label="Copyright" value={footer.copyright} onChange={v => setFooter(f => ({ ...f, copyright: v }))} />
             <ConfigField id="cfg-footer-tagline" label="Tagline" value={footer.tagline} onChange={v => setFooter(f => ({ ...f, tagline: v }))} />
             <ConfigField id="cfg-footer-whatsapp" label="WhatsApp number" value={footer.whatsapp} onChange={v => setFooter(f => ({ ...f, whatsapp: v }))} />
+            <div style={{ fontSize: '12px', color: 'var(--text-mute)', marginTop: '-0.5rem', marginBottom: '1rem' }}>Use format: +91-XXXXX-XXXXX</div>
             <div className="admin__actions"><button className="admin__btn" onClick={saveFooter}>Save Footer</button></div>
           </div>
         );
