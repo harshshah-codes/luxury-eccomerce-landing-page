@@ -3,8 +3,8 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  loadConfig, saveConfig, resetConfig,
-  loadProducts, saveProducts, resetProducts,
+  loadConfig, saveConfig, reseed,
+  loadProducts, saveProducts,
   type SiteConfig, type Product
 } from '@/lib/site-config';
 import { img, ADMIN_TABS } from '@/lib/helpers';
@@ -295,11 +295,10 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
   };
   const handleResetAll = async () => {
     if (!confirm('Restore all content to defaults? Products, site config, everything will reset.')) return;
-    await resetProducts();
-    const fresh = await resetConfig();
+    await reseed();
+    const fresh = await loadConfig();
     setCfg(fresh);
     setProducts(await loadProducts());
-    // Reset all form states
     setHero({ ...fresh.hero });
     setMarqueeItems(fresh.marqueeItems.join('\n'));
     setManifesto({ ...fresh.manifesto });

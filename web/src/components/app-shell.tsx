@@ -100,10 +100,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <span>Maison Héritage</span>
         </div>
         <ul className="nav__links">
-          <li><a className={linkClass('/')} href="/">Home</a></li>
-          <li><a className={linkClass('/products')} href="/products">Products</a></li>
-          <li><a className={linkClass('/categories')} href="/categories">Categories</a></li>
-          <li><a className={linkClass('/admin')} href="/admin">Admin</a></li>
+          <li><a className={linkClass('/')} href="/">Maison</a></li>
+          <li><a className={linkClass('/shop')} href="/shop">Collections</a></li>
+          <li><a className={linkClass('/atelier')} href="/atelier">Atelier</a></li>
+          <li><a className={linkClass('/admin')} href="/admin">Concierge</a></li>
         </ul>
         <div className="nav__right">
           <a className="nav__whatsapp" href="https://wa.me/33142000000?text=Good%20day%2C%20Maison%20H%C3%A9ritage.%20I%20would%20like%20to%20make%20a%20general%20enquiry." target="_blank" rel="noopener">

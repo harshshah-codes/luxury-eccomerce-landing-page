@@ -50,7 +50,7 @@ export default function HomePage() {
             <p className="hero__sub" id="hero-sub">{h.subtitle}</p>
           </div>
           <div className="hero__cta" id="hero-cta">
-            <Link className="btn" href="/products">View the collections <span className="btn__arrow"></span></Link>
+            <Link className="btn" href="/shop">View the collections <span className="btn__arrow"></span></Link>
             <a className="btn btn--outline" href={whatsappGeneralLink()} target="_blank" rel="noopener">Speak to a concierge</a>
           </div>
         </div>
