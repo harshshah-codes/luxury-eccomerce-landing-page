@@ -36,7 +36,8 @@ export async function GET() {
       principles: siteConfig.principles,
       footer: siteConfig.footer,
       shop: siteConfig.shop,
-      atelierPage: siteConfig.atelierPage
+      atelierPage: siteConfig.atelierPage,
+      whatsappNumber: siteConfig.whatsappNumber
     });
 
     return NextResponse.json(config);
