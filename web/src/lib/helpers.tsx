@@ -1,12 +1,12 @@
 import React from 'react';
 
-export function whatsappLink(productName: string, sku: string, number: string) {
-  const msg = `hey, can i know more about the ${productName} (${sku})`;
+export function whatsappLink(productName: string, sku: string, number: string, brandName: string) {
+  const msg = `Good day, ${brandName}.\n\nI would like to inquire about the ${productName} (Ref: ${sku}).\n\nCould you kindly share availability and the next steps for acquisition?`;
   return `https://wa.me/${cleanPhone(number)}?text=${encodeURIComponent(msg)}`;
 }
 
-export function whatsappGeneralLink(number: string) {
-  return `https://wa.me/${cleanPhone(number)}?text=${encodeURIComponent('hey, can i know more about your products')}`;
+export function whatsappGeneralLink(number: string, brandName: string) {
+  return `https://wa.me/${cleanPhone(number)}?text=${encodeURIComponent(`Good day, ${brandName}. I would like to make a general inquiry.`)}`;
 }
 
 export function img(url: string) {
