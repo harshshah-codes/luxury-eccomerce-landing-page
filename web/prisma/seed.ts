@@ -171,6 +171,7 @@ async function main() {
       atelier: SEED_SITE_CONFIG.atelier,
       principles: SEED_SITE_CONFIG.principles,
       footer: SEED_SITE_CONFIG.footer,
+      whatsappNumber: SEED_SITE_CONFIG.whatsappNumber || '33142000000',
       shop: SEED_SITE_CONFIG.shop,
       atelierPage: SEED_SITE_CONFIG.atelierPage
     }

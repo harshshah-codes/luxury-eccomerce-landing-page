@@ -169,6 +169,7 @@ export async function POST(request: NextRequest) {
         atelier: DEFAULT_SITE_CONFIG.atelier,
         principles: DEFAULT_SITE_CONFIG.principles,
         footer: DEFAULT_SITE_CONFIG.footer,
+        whatsappNumber: DEFAULT_SITE_CONFIG.whatsappNumber || '33142000000',
         shop: DEFAULT_SITE_CONFIG.shop,
         atelierPage: DEFAULT_SITE_CONFIG.atelierPage
       }

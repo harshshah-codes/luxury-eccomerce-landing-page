@@ -51,7 +51,7 @@ export default function HomePage() {
           </div>
           <div className="hero__cta" id="hero-cta">
             <Link className="btn" href="/shop">View the collections <span className="btn__arrow"></span></Link>
-            <a className="btn btn--outline" href={whatsappGeneralLink(cfg.whatsappNumber)} target="_blank" rel="noopener">Speak to a concierge</a>
+            <a className="btn btn--outline" href={whatsappGeneralLink(cfg.whatsappNumber, cfg.footer.brand.replace('\n', ' '))} target="_blank" rel="noopener">Speak to a concierge</a>
           </div>
         </div>
         <div className="hero__right" id="hero-right">

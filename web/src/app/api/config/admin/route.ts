@@ -21,6 +21,7 @@ export async function PUT(request: NextRequest) {
         atelier: config.atelier,
         principles: config.principles,
         footer: config.footer,
+        whatsappNumber: config.whatsappNumber || '33142000000',
         shop: config.shop,
         atelierPage: config.atelierPage
       },
@@ -34,6 +35,7 @@ export async function PUT(request: NextRequest) {
         atelier: config.atelier,
         principles: config.principles,
         footer: config.footer,
+        whatsappNumber: config.whatsappNumber || '33142000000',
         shop: config.shop,
         atelierPage: config.atelierPage
       }

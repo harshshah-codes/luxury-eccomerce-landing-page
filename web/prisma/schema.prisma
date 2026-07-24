@@ -92,6 +92,9 @@ model SiteConfig {
   /// Footer object
   footer       Json
 
+  /// WhatsApp number for enquiry links
+  whatsappNumber String @default("33142000000")
+
   /// Shop page
   shop         Json
 
