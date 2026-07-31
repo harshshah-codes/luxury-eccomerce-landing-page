@@ -8,6 +8,7 @@ import {
   type SiteConfig, type Product
 } from '@/lib/site-config';
 import { img, ADMIN_TABS } from '@/lib/helpers';
+import { ImageUploader, ImageUrlField, ImageUrlRow } from '@/components/admin-image';
 
 type AdminTab = typeof ADMIN_TABS[number];
 
@@ -96,6 +97,75 @@ function ConfigField({ id, label, value, onChange, type = 'text' }: {
   );
 }
 
+// ---------- Image list editor (url | caption | wide) ----------
+function ConfigImageListEditor({ items, onChange }: {
+  items: { url: string; caption: string; wide: boolean }[];
+  onChange: (items: { url: string; caption: string; wide: boolean }[]) => void;
+}) {
+  const update = (i: number, patch: Partial<{ url: string; caption: string; wide: boolean }>) => {
+    onChange(items.map((im, xi) => xi === i ? { ...im, ...patch } : im));
+  };
+  return (
+    <div className="admin__field">
+      <label className="admin__field-label">Images</label>
+      {items.map((im, i) => (
+        <div className="admin__image-card" key={i}>
+          <div className="admin__image-row">
+            <div className="admin__image-row-preview">
+              {im.url ? <img src={im.url} alt="" /> : <span>—</span>}
+            </div>
+            <div className="admin__image-row-main">
+              <input type="text" value={im.url} placeholder="Image URL" onChange={e => update(i, { url: e.target.value })} />
+              <ImageUploader small onUpload={url => update(i, { url })} />
+            </div>
+            <button type="button" className="admin__icon-btn admin__icon-btn--danger" onClick={() => onChange(items.filter((_, xi) => xi !== i))} title="Remove image">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <div className="admin__image-card-meta">
+            <input type="text" value={im.caption} placeholder="Caption" onChange={e => update(i, { caption: e.target.value })} />
+            <label className="admin__checkbox">
+              <input type="checkbox" checked={im.wide} onChange={e => update(i, { wide: e.target.checked })} /> Wide
+            </label>
+          </div>
+        </div>
+      ))}
+      <button type="button" className="admin__btn admin__btn--outline admin__btn--small" onClick={() => onChange([...items, { url: '', caption: '', wide: false }])}>+ Add image</button>
+    </div>
+  );
+}
+
+// ---------- Category list editor (name | imageUrl) ----------
+function CategoryListEditor({ items, onChange }: {
+  items: { name: string; imageUrl: string }[];
+  onChange: (items: { name: string; imageUrl: string }[]) => void;
+}) {
+  const update = (i: number, patch: Partial<{ name: string; imageUrl: string }>) => {
+    onChange(items.map((c, xi) => xi === i ? { ...c, ...patch } : c));
+  };
+  return (
+    <div className="admin__field">
+      <label className="admin__field-label">Categories</label>
+      {items.map((c, i) => (
+        <div className="admin__category-row" key={i}>
+          <input type="text" value={c.name} placeholder="Category name" onChange={e => update(i, { name: e.target.value })} />
+          <div className="admin__image-row-main">
+            <input type="text" value={c.imageUrl} placeholder="Image URL" onChange={e => update(i, { imageUrl: e.target.value })} />
+            <ImageUploader small onUpload={url => update(i, { imageUrl: url })} />
+          </div>
+          <div className="admin__image-row-preview">
+            {c.imageUrl ? <img src={c.imageUrl} alt="" /> : <span>—</span>}
+          </div>
+          <button type="button" className="admin__icon-btn admin__icon-btn--danger" onClick={() => onChange(items.filter((_, xi) => xi !== i))} title="Remove category">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      ))}
+      <button type="button" className="admin__btn admin__btn--outline admin__btn--small" onClick={() => onChange([...items, { name: '', imageUrl: '' }])}>+ Add category</button>
+    </div>
+  );
+}
+
 // ---------- Admin Dashboard ----------
 function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: () => void }) {
   const router = useRouter();
@@ -106,17 +176,17 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
   const [toast, setToast] = useState('');
 
   // Product form state
-  const [pf, setPf] = useState({ name: '', category: '', price: '', sku: '', year: '2024', tag: '', description: '', specs: '', images: '', story: '' });
+  const [pf, setPf] = useState({ name: '', category: '', price: '', sku: '', year: '2024', tag: '', description: '', specs: '', images: [] as string[], story: '' });
 
   // Config section states
   const [hero, setHero] = useState({ ...cfg.hero });
   const [marqueeItems, setMarqueeItems] = useState(cfg.marqueeItems.join('\n'));
   const [manifesto, setManifesto] = useState({ ...cfg.manifesto });
-  const [catsText, setCatsText] = useState(cfg.categories.map(c => `${c.name}|${c.imageUrl}`).join('\n'));
+  const [cats, setCats] = useState(cfg.categories.map(c => ({ ...c })));
   const [atelier, setAtelier] = useState({
     label: cfg.atelier.label, title: cfg.atelier.title, intro: cfg.atelier.intro,
     stats: cfg.atelier.stats.map(s => `${s.num}|${s.label}`).join('\n'),
-    images: cfg.atelier.images.map(im => `${im.url}|${im.caption}|${im.wide ? '1' : '0'}`).join('\n')
+    images: cfg.atelier.images.map(im => ({ ...im }))
   });
   const [principlesText, setPrinciplesText] = useState(cfg.principles.map(p => `${p.num}|${p.name}|${p.desc}|${p.detail}`).join('\n'));
   const [footer, setFooter] = useState({
@@ -136,7 +206,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
     sectionLabel: cfg.atelierPage.sectionLabel, sectionTitle: cfg.atelierPage.sectionTitle,
     sectionIntro: cfg.atelierPage.sectionIntro,
     stats: cfg.atelierPage.stats.map(s => `${s.num}|${s.label}`).join('\n'),
-    images: cfg.atelierPage.images.map(im => `${im.url}|${im.caption}|${im.wide ? '1' : '0'}`).join('\n'),
+    images: cfg.atelierPage.images.map(im => ({ ...im })),
     principlesTitle: cfg.atelierPage.principlesTitle, principlesIntro: cfg.atelierPage.principlesIntro,
     principles: cfg.atelierPage.principles.map(p => `${p.num}|${p.name}|${p.desc}|${p.detail}`).join('\n')
   });
@@ -158,7 +228,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
   }, []);
 
   // ------- Product CRUD -------
-  const resetPf = () => setPf({ name: '', category: cfg.categories[0]?.name || 'Timepieces', price: '', sku: '', year: '2024', tag: '', description: '', specs: '', images: '', story: '' });
+  const resetPf = () => setPf({ name: '', category: cfg.categories[0]?.name || 'Timepieces', price: '', sku: '', year: '2024', tag: '', description: '', specs: '', images: [], story: '' });
 
   const handleProductSave = async () => {
     if (!pf.name.trim()) { showToast('A name is required'); return; }
@@ -166,7 +236,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
       const [label, ...rest] = l.split(':');
       return { label: label.trim(), value: rest.join(':').trim() };
     }).filter(s => s.label && s.value);
-    const images = pf.images.split(',').map(s => s.trim()).filter(Boolean);
+    const images = pf.images.map(s => s.trim()).filter(Boolean);
     const product: Product = {
       id: editingId || 'p' + Date.now(),
       name: pf.name, nameEm: pf.name,
@@ -200,7 +270,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
       name: p.name, category: p.category, price: p.price, sku: p.sku,
       year: p.year, tag: p.tag, description: p.description,
       specs: (p.specs || []).map(s => `${s.label}: ${s.value}`).join('\n'),
-      images: (p.images || []).join(', '), story: p.story || ''
+      images: [...(p.images || [])], story: p.story || ''
     });
   };
 
@@ -230,11 +300,10 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
     showToast('Manifesto saved');
   };
   const saveCategories = () => {
-    const cats = catsText.split('\n').filter(Boolean).map(line => {
-      const [name, imageUrl] = line.split('|').map(s => s.trim());
-      return { name: name || 'Category', imageUrl: imageUrl || 'cat-' + Date.now() };
-    });
-    updateCfg({ ...cfg, categories: cats });
+    const clean = cats
+      .map(c => ({ name: c.name.trim(), imageUrl: c.imageUrl.trim() }))
+      .filter(c => c.name || c.imageUrl);
+    updateCfg({ ...cfg, categories: clean });
     showToast('Categories saved');
   };
   const saveAtelier = () => {
@@ -242,10 +311,9 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
       const [num, label] = line.split('|').map(s => s.trim());
       return { num: num || '', label: label || '' };
     });
-    const images = atelier.images.split('\n').filter(Boolean).map(line => {
-      const [url, caption, wide] = line.split('|').map(s => s.trim());
-      return { url: url || '', caption: caption || '', wide: wide === '1' };
-    });
+    const images = atelier.images
+      .map(im => ({ url: im.url.trim(), caption: im.caption.trim(), wide: im.wide }))
+      .filter(im => im.url || im.caption);
     updateCfg({ ...cfg, atelier: { label: atelier.label, title: atelier.title, intro: atelier.intro, stats, images } });
     showToast('Atelier saved');
   };
@@ -278,10 +346,9 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
       const [num, label] = line.split('|').map(s => s.trim());
       return { num: num || '', label: label || '' };
     });
-    const images = ap.images.split('\n').filter(Boolean).map(line => {
-      const [url, caption, wide] = line.split('|').map(s => s.trim());
-      return { url: url || '', caption: caption || '', wide: wide === '1' };
-    });
+    const images = ap.images
+      .map(im => ({ url: im.url.trim(), caption: im.caption.trim(), wide: im.wide }))
+      .filter(im => im.url || im.caption);
     const principles = ap.principles.split('\n').filter(Boolean).map(line => {
       const [num, name, desc, detail] = line.split('|').map(s => s.trim());
       return { num: num || '', name: name || '', desc: desc || '', detail: detail || '' };
@@ -303,11 +370,11 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
     setHero({ ...fresh.hero });
     setMarqueeItems(fresh.marqueeItems.join('\n'));
     setManifesto({ ...fresh.manifesto });
-    setCatsText(fresh.categories.map(c => `${c.name}|${c.imageUrl}`).join('\n'));
+    setCats(fresh.categories.map(c => ({ ...c })));
     setAtelier({
       label: fresh.atelier.label, title: fresh.atelier.title, intro: fresh.atelier.intro,
       stats: fresh.atelier.stats.map(s => `${s.num}|${s.label}`).join('\n'),
-      images: fresh.atelier.images.map(im => `${im.url}|${im.caption}|${im.wide ? '1' : '0'}`).join('\n')
+      images: fresh.atelier.images.map(im => ({ ...im }))
     });
     setPrinciplesText(fresh.principles.map(p => `${p.num}|${p.name}|${p.desc}|${p.detail}`).join('\n'));
     setFooter({
@@ -327,7 +394,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
       sectionLabel: fresh.atelierPage.sectionLabel, sectionTitle: fresh.atelierPage.sectionTitle,
       sectionIntro: fresh.atelierPage.sectionIntro,
       stats: fresh.atelierPage.stats.map(s => `${s.num}|${s.label}`).join('\n'),
-      images: fresh.atelierPage.images.map(im => `${im.url}|${im.caption}|${im.wide ? '1' : '0'}`).join('\n'),
+      images: fresh.atelierPage.images.map(im => ({ ...im })),
       principlesTitle: fresh.atelierPage.principlesTitle, principlesIntro: fresh.atelierPage.principlesIntro,
       principles: fresh.atelierPage.principles.map(p => `${p.num}|${p.name}|${p.desc}|${p.detail}`).join('\n')
     });
@@ -354,7 +421,19 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
             <ConfigField id="f-tag" label="Tag" value={pf.tag} onChange={v => setPf(p => ({ ...p, tag: v }))} />
             <ConfigField id="f-description" label="Description" value={pf.description} onChange={v => setPf(p => ({ ...p, description: v }))} type="textarea" />
             <ConfigField id="f-specs" label="Specifications (Label: Value per line)" value={pf.specs} onChange={v => setPf(p => ({ ...p, specs: v }))} type="textarea" />
-            <ConfigField id="f-images" label="Image URLs (comma separated)" value={pf.images} onChange={v => setPf(p => ({ ...p, images: v }))} />
+            <div className="admin__field">
+              <label className="admin__field-label">Images (multiple supported)</label>
+              {pf.images.map((imgUrl, i) => (
+                <ImageUrlRow
+                  key={i}
+                  index={i}
+                  value={imgUrl}
+                  onValue={v => setPf(p => ({ ...p, images: p.images.map((x, xi) => xi === i ? v : x) }))}
+                  onRemove={() => setPf(p => ({ ...p, images: p.images.filter((_, xi) => xi !== i) }))}
+                />
+              ))}
+              <button type="button" className="admin__btn admin__btn--outline admin__btn--small" onClick={() => setPf(p => ({ ...p, images: [...p.images, ''] }))}>+ Add image</button>
+            </div>
             <ConfigField id="f-story" label="Story" value={pf.story} onChange={v => setPf(p => ({ ...p, story: v }))} type="textarea" />
             <div className="admin__actions">
               <button className="admin__btn" onClick={handleProductSave}>{editingId ? 'Save changes' : 'Add object'}</button>
@@ -369,7 +448,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
             <ConfigField id="cfg-hero-eyebrow" label="Eyebrow" value={hero.eyebrow} onChange={v => setHero(h => ({ ...h, eyebrow: v }))} />
             <ConfigField id="cfg-hero-title" label="Title" value={hero.title} onChange={v => setHero(h => ({ ...h, title: v }))} type="textarea" />
             <ConfigField id="cfg-hero-subtitle" label="Subtitle" value={hero.subtitle} onChange={v => setHero(h => ({ ...h, subtitle: v }))} type="textarea" />
-            <ConfigField id="cfg-hero-image" label="Image URL" value={hero.imageUrl} onChange={v => setHero(h => ({ ...h, imageUrl: v }))} />
+            <ImageUrlField id="cfg-hero-image" label="Image" value={hero.imageUrl} onChange={v => setHero(h => ({ ...h, imageUrl: v }))} />
             <ConfigField id="cfg-hero-meta-num" label="Meta number" value={hero.metaNum} onChange={v => setHero(h => ({ ...h, metaNum: v }))} />
             <ConfigField id="cfg-hero-meta-text" label="Meta text" value={hero.metaText} onChange={v => setHero(h => ({ ...h, metaText: v }))} />
             <div className="admin__actions"><button className="admin__btn" onClick={saveHero}>Save Hero</button></div>
@@ -401,10 +480,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
         return (
           <div>
             <div className="admin__sidebar-title">Categories</div>
-            <div className="admin__field">
-              <label className="admin__field-label">Categories (one per line: Name|imageUrl)</label>
-              <textarea value={catsText} onChange={e => setCatsText(e.target.value)} placeholder="Timepieces|cat-timepieces" />
-            </div>
+            <CategoryListEditor items={cats} onChange={setCats} />
             <div className="admin__actions"><button className="admin__btn" onClick={saveCategories}>Save Categories</button></div>
           </div>
         );
@@ -419,10 +495,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
               <label className="admin__field-label">Stats (one per line: num|label)</label>
               <textarea value={atelier.stats} onChange={e => setAtelier(a => ({ ...a, stats: e.target.value }))} placeholder="1923|Year founded" />
             </div>
-            <div className="admin__field">
-              <label className="admin__field-label">Images (one per line: url|caption|wide(1/0))</label>
-              <textarea value={atelier.images} onChange={e => setAtelier(a => ({ ...a, images: e.target.value }))} placeholder="atelier-bench|— caption|1" />
-            </div>
+            <ConfigImageListEditor items={atelier.images} onChange={images => setAtelier(a => ({ ...a, images }))} />
             <div className="admin__actions"><button className="admin__btn" onClick={saveAtelier}>Save Atelier</button></div>
           </div>
         );
@@ -471,7 +544,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
             <ConfigField id="cfg-ap-hero-eyebrow" label="Hero Eyebrow" value={ap.heroEyebrow} onChange={v => setAp(a => ({ ...a, heroEyebrow: v }))} />
             <ConfigField id="cfg-ap-hero-title" label="Hero Title" value={ap.heroTitle} onChange={v => setAp(a => ({ ...a, heroTitle: v }))} type="textarea" />
             <ConfigField id="cfg-ap-hero-sub" label="Hero Subtitle" value={ap.heroSub} onChange={v => setAp(a => ({ ...a, heroSub: v }))} type="textarea" />
-            <ConfigField id="cfg-ap-hero-image" label="Hero Image URL" value={ap.heroImageUrl} onChange={v => setAp(a => ({ ...a, heroImageUrl: v }))} />
+            <ImageUrlField id="cfg-ap-hero-image" label="Hero Image" value={ap.heroImageUrl} onChange={v => setAp(a => ({ ...a, heroImageUrl: v }))} />
             <ConfigField id="cfg-ap-hero-meta-num" label="Hero Meta number" value={ap.heroMetaNum} onChange={v => setAp(a => ({ ...a, heroMetaNum: v }))} />
             <ConfigField id="cfg-ap-hero-meta-text" label="Hero Meta text" value={ap.heroMetaText} onChange={v => setAp(a => ({ ...a, heroMetaText: v }))} />
             <h3 style={{ font: 'var(--serif)', fontSize: '1rem', margin: '1rem 0 0.5rem', opacity: 0.6 }}>Section</h3>
@@ -484,10 +557,7 @@ function Dashboard({ cfg: initialCfg, onLogout }: { cfg: SiteConfig; onLogout: (
               <textarea value={ap.stats} onChange={e => setAp(a => ({ ...a, stats: e.target.value }))} placeholder="23|Artisans" />
             </div>
             <h3 style={{ font: 'var(--serif)', fontSize: '1rem', margin: '1rem 0 0.5rem', opacity: 0.6 }}>Images</h3>
-            <div className="admin__field">
-              <label className="admin__field-label">Images (one per line: url|caption|wide(1/0))</label>
-              <textarea value={ap.images} onChange={e => setAp(a => ({ ...a, images: e.target.value }))} placeholder="atelier-watch|— caption|1" />
-            </div>
+            <ConfigImageListEditor items={ap.images} onChange={images => setAp(a => ({ ...a, images }))} />
             <h3 style={{ font: 'var(--serif)', fontSize: '1rem', margin: '1rem 0 0.5rem', opacity: 0.6 }}>Principles</h3>
             <ConfigField id="cfg-ap-principles-title" label="Principles Title" value={ap.principlesTitle} onChange={v => setAp(a => ({ ...a, principlesTitle: v }))} />
             <ConfigField id="cfg-ap-principles-intro" label="Principles Intro" value={ap.principlesIntro} onChange={v => setAp(a => ({ ...a, principlesIntro: v }))} type="textarea" />

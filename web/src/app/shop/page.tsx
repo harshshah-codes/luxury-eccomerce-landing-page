@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { loadConfig, loadProducts, type SiteConfig, type Product } from '@/lib/site-config';
-import { img, RichText } from '@/lib/helpers';
+import { RichText } from '@/lib/helpers';
 import { initRevealObserver } from '@/lib/animations';
 import Footer from '@/components/footer';
+import ProductCard from '@/components/product-card';
 
 export default function ShopPage() {
   const [cfg, setCfg] = useState<SiteConfig | null>(null);
@@ -39,20 +39,7 @@ export default function ShopPage() {
           </div>
         </div>
         <div className="product-grid">
-          {products.map(p => (
-            <Link className="product-card reveal" href={`/products/${p.id}`} key={p.id}>
-              <div className="product-card__image">
-                <span className="product-card__tag">{p.tag}</span>
-                <img className="lazy-img" src={img(p.images[0])} alt={p.name} />
-              </div>
-              <div className="product-card__category">{p.category}</div>
-              <div className="product-card__name">{p.name}</div>
-              <div className="product-card__meta">
-                <div className="product-card__price">{p.price}</div>
-                <div className="product-card__arrow">View →</div>
-              </div>
-            </Link>
-          ))}
+          {products.map(p => <ProductCard key={p.id} product={p} />)}
         </div>
       </section>
       <Footer cfg={cfg} />
