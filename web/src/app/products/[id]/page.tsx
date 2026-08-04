@@ -7,6 +7,7 @@ import { loadConfig, loadProducts, type SiteConfig, type Product } from '@/lib/s
 import { img, whatsappLink } from '@/lib/helpers';
 import { initRevealObserver } from '@/lib/animations';
 import Footer from '@/components/footer';
+import ProductCard from '@/components/product-card';
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -14,7 +15,7 @@ export default function ProductDetailPage() {
   const [cfg, setCfg] = useState<SiteConfig | null>(null);
   const [product, setProduct] = useState<Product | undefined>(undefined);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
-  const [mainImage, setMainImage] = useState('');
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
     const loadData = async () => {
@@ -24,7 +25,7 @@ export default function ProductDetailPage() {
       setAllProducts(products);
       const p = products.find(x => x.id === id);
       setProduct(p);
-      if (p) setMainImage(img(p.images[0]));
+      setIndex(0);
     };
     loadData();
   }, [id]);
@@ -53,19 +54,9 @@ export default function ProductDetailPage() {
   }
 
   const related = allProducts.filter(p => p.id !== product.id).slice(0, 3);
-
-  const swapMainImage = (thumb: HTMLElement) => {
-    document.querySelectorAll('.product-detail__thumb').forEach(t => t.classList.remove('active'));
-    thumb.classList.add('active');
-    const mainImg = document.getElementById('main-img-el') as HTMLImageElement;
-    if (mainImg) {
-      mainImg.style.opacity = '0';
-      setTimeout(() => {
-        mainImg.src = thumb.dataset.img!;
-        mainImg.style.opacity = '1';
-      }, 200);
-    }
-  };
+  const images = product.images.filter(Boolean);
+  const count = images.length;
+  const goTo = (i: number) => setIndex((i + count) % count);
 
   return (
     <div className="page-fade">
@@ -73,20 +64,42 @@ export default function ProductDetailPage() {
         <div className="product-detail__inner">
           <div className="product-detail__gallery">
             <div className="product-detail__main-image" id="main-image">
-              <img id="main-img-el" src={mainImage || img(product.images[0])} alt={product.name} />
+              <img id="main-img-el" src={img(images[index] || product.images[0])} alt={`${product.name} view ${index + 1}`} />
+              {count > 1 && (
+                <>
+                  <button type="button" className="carousel-nav__btn carousel-nav__btn--solo carousel-nav__btn--left" onClick={() => goTo(index - 1)} aria-label="Previous image">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polyline points="15 18 9 12 15 6"/></svg>
+                  </button>
+                  <button type="button" className="carousel-nav__btn carousel-nav__btn--solo carousel-nav__btn--right" onClick={() => goTo(index + 1)} aria-label="Next image">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polyline points="9 18 15 12 9 6"/></svg>
+                  </button>
+                  <div className="carousel-dots carousel-dots--overlay">
+                    {images.map((_, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        className={`carousel-dot${i === index ? ' active' : ''}`}
+                        onClick={() => goTo(i)}
+                        aria-label={`Image ${i + 1}`}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
-            <div className="product-detail__thumbs">
-              {product.images.map((imgUrl, i) => (
-                <div
-                  className={`product-detail__thumb ${i === 0 ? 'active' : ''}`}
-                  data-img={img(imgUrl)}
-                  onClick={(e) => swapMainImage(e.currentTarget)}
-                  key={i}
-                >
-                  <img src={img(imgUrl)} alt={`${product.name} view ${i + 1}`} />
-                </div>
-              ))}
-            </div>
+            {count > 1 && (
+              <div className="product-detail__thumbs">
+                {images.map((imgUrl, i) => (
+                  <div
+                    className={`product-detail__thumb ${i === index ? 'active' : ''}`}
+                    onClick={() => goTo(i)}
+                    key={i}
+                  >
+                    <img src={img(imgUrl)} alt={`${product.name} view ${i + 1}`} />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
           <div className="product-detail__info">
             <div className="product-detail__breadcrumb">
@@ -150,7 +163,7 @@ export default function ProductDetailPage() {
             </div>
           </div>
           <div className="story-strip__image reveal">
-            <img className="lazy-img" src={img(product.images[1] || product.images[0])} alt={`${product.name} story`} />
+            <img className="lazy-img" src={img(images[1] || images[0])} alt={`${product.name} story`} />
           </div>
         </div>
       </section>
@@ -161,20 +174,7 @@ export default function ProductDetailPage() {
           <Link className="featured__link reveal" href="/products">All objects →</Link>
         </div>
         <div className="product-grid">
-          {related.map(p => (
-            <Link className="product-card reveal" href={`/products/${p.id}`} key={p.id}>
-              <div className="product-card__image">
-                <span className="product-card__tag">{p.tag}</span>
-                <img className="lazy-img" src={img(p.images[0])} alt={p.name} />
-              </div>
-              <div className="product-card__category">{p.category}</div>
-              <div className="product-card__name">{p.name}</div>
-              <div className="product-card__meta">
-                <div className="product-card__price">{p.price}</div>
-                <div className="product-card__arrow">View →</div>
-              </div>
-            </Link>
-          ))}
+          {related.map(p => <ProductCard key={p.id} product={p} />)}
         </div>
       </section>
 
