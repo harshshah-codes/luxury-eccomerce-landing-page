@@ -1,4 +1,4 @@
-# Maison Héritage — Admin Panel Guide
+# The Ethiel Studio — Admin Panel Guide
 
 A luxury brand website with a full admin panel to manage every piece of content.
 
@@ -51,7 +51,7 @@ Controls the large hero section at the top of the home page.
 
 | Field | What it controls | Format | Hidden Tips |
 |---|---|---|---|
-| **Eyebrow** | Small label above the main title | Plain text | e.g. "Maison Héritage". Keep short — 1–3 words. |
+| **Eyebrow** | Small label above the main title | Plain text | e.g. "The Ethiel Studio". Keep short — 1–3 words. |
 | **Title** | The big headline on the hero | Supports `<em>` and `<br>` | Use `<em>italic</em>` for emphasis. Use `<br>` for line breaks. Example: `Objects considered<br>for a life <em>unlived</em>.` |
 | **Subtitle** | Text below the headline | Plain text (multi-line) | Shows smaller and in softer color. |
 | **Image URL** | Large background image on the right side | Full URL | Recommended size: at least 1100×1400px for sharp display. |
@@ -165,7 +165,7 @@ Site-wide footer with brand info, navigation columns, and WhatsApp settings.
 | **Brand** | Brand name in the footer | Supports `\n` (literal backslash-n) for line break | Example: `Maison\nHéritage` renders as two lines (Maison on top, Héritage below). Also **feeds into WhatsApp messages** as the greeting name. |
 | **Tag line** | Brand description below the name | Plain text (multi-line) | Shows in softer text. |
 | **Columns** | Navigation link groups | One per line: `Title|Link1:url, Link2:url, Link3` | See detailed format below. |
-| **Copyright** | Copyright line at the bottom | Plain text | Example: `© 1923—2024 Maison Héritage SA · Paris · Geneva · Tokyo` |
+| **Copyright** | Copyright line at the bottom | Plain text | Example: `© 1923—2024 The Ethiel Studio SA · Paris · Geneva · Tokyo` |
 | **Tagline** | Final tagline at the very bottom | Plain text | Example: `Crafted with restraint` |
 | **WhatsApp number** | Phone number for all WhatsApp links | Any format — non-digits stripped | Example: `+91-98765-43210`. The system strips `+`, `-`, spaces and uses `919876543210` in the actual `wa.me/` link. The number you type is also displayed as-is in the nav bar. |
 
@@ -192,7 +192,7 @@ In the "Maison" column: Heritage links to `/`, The Atelier links to `/atelier`, 
 
 **Brand → WhatsApp connection**:
 The **Brand** field also powers the company name in all WhatsApp messages. For example, if Brand is `Maison\nHéritage`:
-- The greeting reads: "Good day, Maison Héritage."
+- The greeting reads: "Good day, The Ethiel Studio."
 - The `\n` is automatically replaced with a space in the message
 
 ---

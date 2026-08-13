@@ -7,8 +7,8 @@ const ebGaramond = EB_Garamond({ subsets: ['latin'], weight: ['400', '500', '600
 const manrope = Manrope({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
-  title: "Maison Héritage — Atelier of Considered Objects, Paris 1923",
-  description: "An atelier of considered objects, established in Paris, 1923.",
+  title: "The Ethiel Studio — Atelier of Considered Objects",
+  description: "An atelier of considered objects.",
 };
 
 export default function RootLayout({

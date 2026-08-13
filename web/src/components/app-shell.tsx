@@ -10,7 +10,7 @@ import { cleanPhone } from '@/lib/helpers';
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [whatsappNumber, setWhatsappNumber] = useState('33142000000');
-  const [brandName, setBrandName] = useState('Maison Héritage');
+  const [brandName, setBrandName] = useState('The Ethiel Studio');
   const [mobileOpen, setMobileOpen] = useState(false);
   const cursorRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
@@ -109,7 +109,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <nav className="nav" id="nav" ref={navRef}>
         <div className="nav__logo" onClick={() => { window.location.href = '/'; setMobileOpen(false); }}>
           <span className="nav__logo-mark"></span>
-          <span>Maison Héritage</span>
+          <span>The Ethiel Studio</span>
         </div>
         <div className="nav__right">
           <a className="nav__whatsapp" href={`https://wa.me/${cleanPhone(whatsappNumber)}?text=${encodeURIComponent(`Good day, ${brandName}. I would like to make a general inquiry.`)}`} target="_blank" rel="noopener">
@@ -127,7 +127,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       </nav>
       <ul className={`nav__links${mobileOpen ? ' open' : ''}`}>
         <li className="nav__sheet-header">
-          <span className="nav__sheet-brand">Maison Héritage</span>
+          <span className="nav__sheet-brand">The Ethiel Studio</span>
           <button className="nav__sheet-close" onClick={() => setMobileOpen(false)}>×</button>
         </li>
         <li><a className={linkClass('/')} href="/" onClick={() => setMobileOpen(false)}>Maison</a></li>

@@ -10,7 +10,7 @@ const prisma = new PrismaClient({ adapter });
 const SEED_SITE_CONFIG = {
   id: 1,
   hero: {
-    eyebrow: 'Maison Héritage',
+    eyebrow: 'The Ethiel Studio',
     title: 'Objects considered\nfor a life unlived.',
     subtitle: 'Timepieces, footwear, leather goods, garments and objets — produced in limited number, by hand, intended for life.',
     imageSeed: 'luxury-watch-hero',
@@ -30,7 +30,7 @@ const SEED_SITE_CONFIG = {
   manifesto: {
     label: 'Principles',
     quote: 'We make only what we would keep. Every joint, every stitch, every surface is finished to the standard of the maker — not the expectation of the buyer.',
-    attribution: 'Maison Héritage',
+    attribution: 'The Ethiel Studio',
     role: 'Founded Paris, 1923'
   },
   categories: [
@@ -100,7 +100,7 @@ const SEED_SITE_CONFIG = {
         ]
       }
     ],
-    copyright: '© 1923—2024 Maison Héritage SA · Paris · Geneva · Tokyo',
+    copyright: '© 1923—2024 The Ethiel Studio SA · Paris · Geneva · Tokyo',
     tagline: 'Crafted with restraint'
   },
   whatsappNumber: '33142000000',
@@ -117,7 +117,7 @@ const SEED_SITE_CONFIG = {
     heroMetaText: 'Rue du Faubourg\nSaint-Honoré, Paris',
     sectionLabel: 'The Workshop',
     sectionTitle: 'Eight disciplines.\nOne standard.',
-    sectionIntro: 'Every craftsperson at Maison Héritage has completed a minimum seven-year apprenticeship. Each holds a bench in the main atelier — a single room, natural light, tools inherited from the previous occupant.',
+    sectionIntro: 'Every craftsperson at The Ethiel Studio has completed a minimum seven-year apprenticeship. Each holds a bench in the main atelier — a single room, natural light, tools inherited from the previous occupant.',
     stats: [
       { num: '23', label: 'Artisans at the bench' },
       { num: '1923', label: 'Year established' },
