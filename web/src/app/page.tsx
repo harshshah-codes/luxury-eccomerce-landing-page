@@ -28,7 +28,7 @@ export default function HomePage() {
     initRevealObserver();
   }, [cfg]);
 
-  if (!cfg || products.length === 0) return null;
+  if (!cfg) return null;
 
   const featured = products.slice(0, 3);
   const h = cfg.hero;
@@ -109,15 +109,17 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="featured">
-        <div className="featured__head">
-          <h2 className="featured__title reveal"><RichText text={cfg.featured.title} /></h2>
-          <Link className="featured__link reveal" href="/products">All objects →</Link>
-        </div>
-        <div className="product-grid">
-          {featured.map(p => <ProductCard key={p.id} product={p} />)}
-        </div>
-      </section>
+      {featured.length > 0 && (
+        <section className="featured">
+          <div className="featured__head">
+            <h2 className="featured__title reveal"><RichText text={cfg.featured.title} /></h2>
+            <Link className="featured__link reveal" href="/products">All objects →</Link>
+          </div>
+          <div className="product-grid">
+            {featured.map(p => <ProductCard key={p.id} product={p} />)}
+          </div>
+        </section>
+      )}
 
       <section className="atelier">
         <div className="atelier__inner">
