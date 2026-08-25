@@ -23,10 +23,10 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    if (!cfg) return;
+    if (!cfg || products.length === 0) return;
     initHomeAnimations();
     initRevealObserver();
-  }, [cfg]);
+  }, [cfg, products.length]);
 
   if (!cfg || products.length === 0) return null;
 
